@@ -9,6 +9,7 @@ namespace Chess
         static void Main(string[] args)
         {
             Game CurrentGame = new Game();
+            Print.PrintBoard(CurrentGame.Chessboard);
 
 
 

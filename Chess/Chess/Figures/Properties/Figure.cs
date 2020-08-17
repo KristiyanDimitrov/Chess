@@ -11,6 +11,7 @@ namespace Chess.Figures.Properties
         public Position FigurePosition = null; //Relationship
 
         public abstract void MoveFigure();
+        public abstract override string ToString();
 
         protected Figure (int row, int column, ColorList color )
         {

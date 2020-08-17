@@ -13,5 +13,7 @@ namespace Chess.Figures
         {
             Console.WriteLine("Move");
         }
+
+        public override string ToString() => "Q";
     }
 }

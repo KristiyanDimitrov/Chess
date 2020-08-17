@@ -24,22 +24,22 @@ namespace Chess
         public void SetBoard()
         {
             
-            Chessboard.MoveFigure(new Rook  (8,0, Figure.ColorList.White));
-            Chessboard.MoveFigure(new Knight(8,1, Figure.ColorList.White));
-            Chessboard.MoveFigure(new Bishop(8,2, Figure.ColorList.White));
-            Chessboard.MoveFigure(new Queen (8,3, Figure.ColorList.White));
-            Chessboard.MoveFigure(new King  (8,4, Figure.ColorList.White));
-            Chessboard.MoveFigure(new Bishop(8,5, Figure.ColorList.White));
-            Chessboard.MoveFigure(new Knight(8,6, Figure.ColorList.White));
-            Chessboard.MoveFigure(new Rook  (8,7, Figure.ColorList.White));
-            Chessboard.MoveFigure(new Pawn(7,0, Figure.ColorList.White));
-            Chessboard.MoveFigure(new Pawn(7,1, Figure.ColorList.White));
-            Chessboard.MoveFigure(new Pawn(7,2, Figure.ColorList.White));
-            Chessboard.MoveFigure(new Pawn(7,3, Figure.ColorList.White));
-            Chessboard.MoveFigure(new Pawn(7,4, Figure.ColorList.White));
-            Chessboard.MoveFigure(new Pawn(7,5, Figure.ColorList.White));
-            Chessboard.MoveFigure(new Pawn(7,6, Figure.ColorList.White));
-            Chessboard.MoveFigure(new Pawn(7,7, Figure.ColorList.White));
+            Chessboard.MoveFigure(new Rook  (7,0, Figure.ColorList.White));
+            Chessboard.MoveFigure(new Knight(7,1, Figure.ColorList.White));
+            Chessboard.MoveFigure(new Bishop(7,2, Figure.ColorList.White));
+            Chessboard.MoveFigure(new Queen (7,3, Figure.ColorList.White));
+            Chessboard.MoveFigure(new King  (7,4, Figure.ColorList.White));
+            Chessboard.MoveFigure(new Bishop(7,5, Figure.ColorList.White));
+            Chessboard.MoveFigure(new Knight(7,6, Figure.ColorList.White));
+            Chessboard.MoveFigure(new Rook  (7,7, Figure.ColorList.White));
+            Chessboard.MoveFigure(new Pawn(6,0, Figure.ColorList.White));
+            Chessboard.MoveFigure(new Pawn(6,1, Figure.ColorList.White));
+            Chessboard.MoveFigure(new Pawn(6,2, Figure.ColorList.White));
+            Chessboard.MoveFigure(new Pawn(6,3, Figure.ColorList.White));
+            Chessboard.MoveFigure(new Pawn(6,4, Figure.ColorList.White));
+            Chessboard.MoveFigure(new Pawn(6,5, Figure.ColorList.White));
+            Chessboard.MoveFigure(new Pawn(6,6, Figure.ColorList.White));
+            Chessboard.MoveFigure(new Pawn(6,7, Figure.ColorList.White));
 
             Chessboard.MoveFigure(new Rook  (0, 0, Figure.ColorList.Black));
             Chessboard.MoveFigure(new Knight(0, 1, Figure.ColorList.Black));
