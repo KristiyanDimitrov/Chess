@@ -24,6 +24,11 @@ namespace Chess.Figures.Properties
             FigurePosition.SetPosition(row, column);
         }
 
+        public void SetPosition(Position position)
+        {
+            FigurePosition.SetPosition(position.Row, position.Column);
+        }
+
         public Position GettPosition()
         {
             return FigurePosition;

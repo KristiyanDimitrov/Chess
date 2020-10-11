@@ -10,18 +10,19 @@ namespace Chess
         {
             Game CurrentGame = new Game();
            
-
-            bool GameEnded = false;
-            while(!GameEnded)
+            while(!CurrentGame.GameEnded)
             {
                 Console.Clear();
                 Print.PrintBoard(CurrentGame.Chessboard);
 
-                //Validates position is valid and it contains a figure
-                Position From = Print.GetPositionFrom_User(CurrentGame.Chessboard); // ¬¬¬¬ Need to add validaton for current player
+                //Validates position is valid and it contains a figure that coresponds to the current player color
+                Position From = Print.GetPositionFrom_User(CurrentGame); 
+                
+                //Validates it is a valid position and prevents moving to a position that contains the same color figure.
+                Position To = Print.GetPositionTo_User(CurrentGame);
 
-                //Validates it is a valid position
-                Position To = Print.GetPositionTo_User(CurrentGame.Chessboard); // ¬¬¬¬ Need to validate position does not contain current player figure
+                //Play the selected move
+                CurrentGame.PlayMove(From, To);
 
 
 
