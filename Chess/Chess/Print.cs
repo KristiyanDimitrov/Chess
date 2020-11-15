@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Chess.Figures.Properties;
 
@@ -8,11 +9,15 @@ namespace Chess
     class Print
     {      
 
-        public static void PrintBoard(Board chessBoard)
+        public static void PrintBoard(Board chessBoard, List<Position> possibleMoves = null)
         {
+            possibleMoves = possibleMoves == null ? new List<Position>() : possibleMoves;
             Console.ForegroundColor = ConsoleColor.Yellow;
             Console.WriteLine("\n   A B C D E F G H\n");
             Console.ResetColor();
+
+            Figure Figure;
+            bool MoveIsPossible = false;
 
             for (int x = chessBoard.Rows-1; x >= 0 ; x--)
             {
@@ -21,8 +26,12 @@ namespace Chess
                 Console.ResetColor();
 
                 for (int y = 0; y <= chessBoard.Columns - 1; y++)
-                {
-                    PrintPiece(chessBoard.GetFigureFromPosition(x, y));
+                {                 
+                    Figure = chessBoard.GetFigureFromPosition(x, y);
+                    int test = possibleMoves.Where(el => el.Row == x && el.Column == y).Count();
+                    MoveIsPossible = possibleMoves.Where(el => el.Row == x && el.Column == y).Count() == 1;
+
+                    PrintPiece(Figure, MoveIsPossible);
                 }
                 Console.WriteLine();
 
@@ -36,21 +45,43 @@ namespace Chess
             PrintTakenFigures(chessBoard);
         }
 
-        private static void PrintPiece(Figure figure)
+        private static void PrintPiece(Figure figure, bool isPossbile)
         {
-            if (figure == null)
+            if (figure == null && !isPossbile)
                 Console.Write("+ ");
+            else if (figure == null && isPossbile)
+            {
+                Console.ForegroundColor = ConsoleColor.Blue;
+                Console.Write("+ ");
+                Console.ResetColor();
+            }
             else
             {
                 if (figure.Color == Figure.ColorList.White)
                 {
-                    Console.Write(figure + " ");
+                    if (isPossbile)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Blue;
+                        Console.Write(figure + " ");
+                        Console.ResetColor();
+                    }
+                    else
+                        Console.Write(figure + " ");
                 }
                 else
                 {
-                    Console.ForegroundColor = ConsoleColor.DarkMagenta;
-                    Console.Write(figure + " ");
-                    Console.ResetColor();
+                    if (isPossbile)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Blue;
+                        Console.Write(figure + " ");
+                        Console.ResetColor();
+                    }
+                    else
+                    {
+                        Console.ForegroundColor = ConsoleColor.DarkMagenta;
+                        Console.Write(figure + " ");
+                        Console.ResetColor();
+                    }
                 }
             }
         }
@@ -88,7 +119,7 @@ namespace Chess
             return position;
         }
 
-        public static Position GetPositionTo_User(Game game)
+        public static Position GetPositionTo_User(Game game, List<Position> possibleMoves)
         {
             int x = -1, y = -1;
             Board chessboard = game.Chessboard;
@@ -98,13 +129,15 @@ namespace Chess
             {
                 Console.WriteLine("To:");
                 var PositionFrom = Console.ReadLine();
+                if (PositionFrom.ToUpper() == "X")
+                    return null;
 
                 x = Char.IsDigit(PositionFrom[0]) ? (int)Char.GetNumericValue(PositionFrom[0]) -1 : -1;
                 y = Board.GetLetterMap(PositionFrom[1]);
 
                 position = new Position(x, y);
 
-                if (!chessboard.ValidatePosition(position))
+                if (!chessboard.ValidatePosition(position) || !possibleMoves.Exists(z => z.Row == x && z.Column == y))
                 {
                     Console.WriteLine("Not a valid position. Please enter again.");
                     continue;

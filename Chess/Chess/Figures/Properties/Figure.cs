@@ -10,7 +10,7 @@ namespace Chess.Figures.Properties
         public ColorList Color { get; private set; }
         public Position FigurePosition = null; //Relationship
 
-        public abstract void MoveFigure();
+        public abstract List<Position> PossibleMoves(Board board);
         public abstract override string ToString();
 
         protected Figure (int row, int column, ColorList color )
@@ -19,12 +19,12 @@ namespace Chess.Figures.Properties
             FigurePosition = new Position(row, column);
         }
 
-        public void SetPosition (int row, int column)
+        public virtual void SetPosition (int row, int column)
         {
             FigurePosition.SetPosition(row, column);
         }
 
-        public void SetPosition(Position position)
+        public virtual void SetPosition(Position position)
         {
             FigurePosition.SetPosition(position.Row, position.Column);
         }

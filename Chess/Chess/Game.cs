@@ -67,5 +67,12 @@ namespace Chess
             Chessboard.MoveFigure(SelectedFigure,to);
             CurrentPlayer = CurrentPlayer == Figure.ColorList.White ? Figure.ColorList.Black : Figure.ColorList.White;
         }
+
+        public List<Position> getPossibleMoves(Position from)
+        {
+            Figure SelectedFigure = Chessboard.GetFigureFromPosition(from);
+
+            return SelectedFigure.PossibleMoves(Chessboard);
+        }
     }
 }

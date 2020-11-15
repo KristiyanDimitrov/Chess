@@ -9,9 +9,9 @@ namespace Chess.Figures
     {
         public King(int row, int column, ColorList color) : base(row, column, color) { }
 
-        public override void MoveFigure()
+        public override List<Position> PossibleMoves(Board board)
         {
-            Console.WriteLine("Move");
+            return new List<Position>();
         }
 
         public override string ToString() => "K";

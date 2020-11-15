@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Chess.Figures;
 using Chess.Figures.Properties;
 
@@ -9,19 +10,29 @@ namespace Chess
         static void Main(string[] args)
         {
             Game CurrentGame = new Game();
-           
-            while(!CurrentGame.GameEnded)
+            List<Position> PossibleMoves = new List<Position>();
+
+            while (!CurrentGame.GameEnded)
             {
                 Console.Clear();
                 Print.PrintBoard(CurrentGame.Chessboard);
 
                 //Validates position is valid and it contains a figure that coresponds to the current player color
-                Position From = Print.GetPositionFrom_User(CurrentGame); 
-                
-                //Validates it is a valid position and prevents moving to a position that contains the same color figure.
-                Position To = Print.GetPositionTo_User(CurrentGame);
+                Position From = Print.GetPositionFrom_User(CurrentGame);
+
+                //Get possible moves
+                PossibleMoves = CurrentGame.getPossibleMoves(From);
+
+                Console.Clear();
+                Print.PrintBoard(CurrentGame.Chessboard, PossibleMoves);
+
+                //Validates it is a valid position
+                Position To = Print.GetPositionTo_User(CurrentGame, PossibleMoves);
 
                 //Play the selected move
+                if (To == null)
+                    continue;
+
                 CurrentGame.PlayMove(From, To);
 
 

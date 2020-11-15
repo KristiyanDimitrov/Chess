@@ -23,7 +23,11 @@ namespace Chess
 
         public Figure GetFigureFromPosition(int row, int column)
         {
-            return Figures[row, column];
+            
+            if (ValidatePosition(new Position(row,column)))
+                return Figures[row, column];
+            else
+                return null;
         }
 
         public Figure GetFigureFromPosition(Position position)
@@ -39,6 +43,14 @@ namespace Chess
 
         public bool ExistFigure(Position position)
         {
+            if (ValidatePosition(position))
+                return GetFigureFromPosition(position) != null;
+            else
+                return false;
+        }
+        public bool ExistFigure(int x, int y)
+        {
+            Position position = new Position(x, y);
             if (ValidatePosition(position))
                 return GetFigureFromPosition(position) != null;
             else
