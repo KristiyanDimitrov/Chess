@@ -21,6 +21,29 @@ namespace Chess
             TakenFigures = new List<Figure>();
         }
 
+        // Return false if the figure can not advance further
+        public bool BasicMoveValidate (List<Position> possiblePositions,  Figure figure, int x, int y)
+        {
+            if (!ValidatePosition(new Position(x,y)))
+                return false;
+
+            if (ExistFigure(x, y) && GetFigureFromPosition(x, y).Color != figure.Color)
+            {
+                possiblePositions.Add(new Position(x, y));
+                return false;
+            }
+            else if (GetFigureFromPosition(x, y)?.Color == figure.Color)
+            {
+                return false;
+            }                
+            else
+            {
+                possiblePositions.Add(new Position(x, y));
+                return true;
+            }
+                
+        }
+
         public Figure GetFigureFromPosition(int row, int column)
         {
             
