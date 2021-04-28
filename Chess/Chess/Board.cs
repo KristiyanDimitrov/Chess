@@ -103,8 +103,6 @@ namespace Chess
             Figures[position.Row, position.Column] = figure;
         }
 
-
-
         public void MoveFigure(Figure figure) // For intialising the board
         {
             Position Position = figure.GettPosition();

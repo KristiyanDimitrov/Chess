@@ -17,7 +17,7 @@ namespace Chess.Figures
 
             if (base.Color == ColorList.Black)
             {
-                for (int x = CurPos.Row + 1; x <= CurPos.Row + 2; x++)
+                for (int x = CurPos.Row + 1; x <= CurPos.Row + 1 + Convert.ToInt32(FirstMove); x++)
                 {
                     if (!board.ExistFigure(x, CurPos.Column) && (x == CurPos.Row + 1 || PossiblePositions.Exists(z => z.Row == CurPos.Row + 1 && z.Column == CurPos.Column)))
                         PossiblePositions.Add(new Position(x, CurPos.Column));
@@ -31,7 +31,7 @@ namespace Chess.Figures
             }
             else
             {
-                for (int x = CurPos.Row - 1; x >= CurPos.Row - 2; x--)
+                for (int x = CurPos.Row - 1; x >= CurPos.Row - 1 - Convert.ToInt32(FirstMove); x--)
                 {
                     if (!board.ExistFigure(x, CurPos.Column) && (x == CurPos.Row - 1 || PossiblePositions.Exists( z => z.Row == CurPos.Row - 1 && z.Column == CurPos.Column)))
                         PossiblePositions.Add(new Position(x, CurPos.Column));
@@ -44,23 +44,22 @@ namespace Chess.Figures
                 }
             }
             
-
             return PossiblePositions;
         }
 
         public override void SetPosition(int row, int column)
         {
-            FistMove = FistMove == true ? false : FistMove;
+            FirstMove = false;
             base.SetPosition(row, column);
         }
 
         public override void SetPosition(Position position)
         {
-            FistMove = FistMove == true ? false : FistMove;
+            FirstMove = false;
             base.SetPosition(position);
         }
 
         public override string ToString() => "P";
-        private bool FistMove = true;
+        private bool FirstMove = true;
     }
 }

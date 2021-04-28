@@ -13,40 +13,20 @@ namespace Chess.Figures
         {
             List<Position> PossiblePositions = new List<Position>();
             Position CurPos = base.FigurePosition;
-            bool CheckPosition;
             int X = CurPos.Row;
             int Y = CurPos.Column;
 
-            bool XY_Pos, XY_Neg, Y_Pos, Y_Neg; // Indicator if the diagonal is blocked
-            XY_Pos = XY_Neg = Y_Pos = Y_Neg = true;
+            bool X_Pos, X_Neg, Y_Pos, Y_Neg; // Indicator if the diagonal is blocked
+            X_Pos = X_Neg = Y_Pos = Y_Neg = true;
 
             for (int i = 1; true; i++)
             {
-                if(XY_Pos)
-                {
-                    CheckPosition = board.BasicMoveValidate(PossiblePositions, this, X + i, Y + i);
-                    XY_Pos = CheckPosition;
-                }
+                X_Pos = X_Pos ? board.BasicMoveValidate(PossiblePositions, this, X + i, Y + i) : false;
+                Y_Neg = Y_Neg ? board.BasicMoveValidate(PossiblePositions, this, X + i, Y - i) : false;
+                X_Neg = X_Neg ? board.BasicMoveValidate(PossiblePositions, this, X - i, Y - i) : false;
+                Y_Pos = Y_Pos ? board.BasicMoveValidate(PossiblePositions, this, X - i, Y + i) : false;
 
-                if (Y_Neg)
-                {
-                    CheckPosition = board.BasicMoveValidate(PossiblePositions, this, X + i, Y - i);
-                    Y_Neg = CheckPosition;
-                }
-
-                if (XY_Neg)
-                {
-                    CheckPosition = board.BasicMoveValidate(PossiblePositions, this, X - i, Y - i);
-                    XY_Neg = CheckPosition;
-                }
-
-                if (Y_Pos)
-                {
-                    CheckPosition = board.BasicMoveValidate(PossiblePositions, this, X - i, Y + i);
-                    Y_Pos = CheckPosition;
-                }
-
-                if (!XY_Pos && !XY_Neg && !Y_Pos && !Y_Neg)
+                if (!X_Pos && !X_Neg && !Y_Pos && !Y_Neg)
                     break;
             }
 
