@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Chess.Figures;
 using Chess.Figures.Properties;
@@ -108,7 +109,6 @@ namespace Chess
             Position Position = figure.GettPosition();
 
             Figures[Position.Row, Position.Column] = figure;
-           ;
         }
 
         private void SetPosition(Figure figure, Position position)
@@ -138,6 +138,8 @@ namespace Chess
             Figures[position.Row, position.Column] = null;
             return figure;
         }
+
+        public Figure GetKingPosition(Figure.ColorList color) => Figures.Cast<Figure>().ToArray().Where(x => x.GetType().Name == "King" && x.Color == color).FirstOrDefault();
 
         public static int GetLetterMap(char letter)
         {

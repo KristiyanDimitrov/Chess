@@ -64,6 +64,8 @@ namespace Chess
         public void PlayMove(Position from, Position to)
         {
             Figure SelectedFigure = Chessboard.ClearPosition(from);
+            SelectedFigure.IsFirstMove = false;
+
             Chessboard.MoveFigure(SelectedFigure,to);
             CurrentPlayer = CurrentPlayer == Figure.ColorList.White ? Figure.ColorList.Black : Figure.ColorList.White;
         }

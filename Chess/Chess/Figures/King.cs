@@ -8,7 +8,7 @@ namespace Chess.Figures
     class King : Figure
     {
         public King(int row, int column, ColorList color) : base(row, column, color) { }
-
+        public bool KingInCheck { get; set; } = false;
         public override List<Position> PossibleMoves(Board board)
         {
             List<Position> PossiblePositions = new List<Position>();

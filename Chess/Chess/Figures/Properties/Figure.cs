@@ -9,6 +9,7 @@ namespace Chess.Figures.Properties
         public enum ColorList{White, Black }
         public ColorList Color { get; private set; }
         public Position FigurePosition = null; //Relationship
+        public bool IsFirstMove { get; set; } = true;
 
         public abstract List<Position> PossibleMoves(Board board);
         public abstract override string ToString();
