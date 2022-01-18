@@ -107,7 +107,7 @@ namespace Chess
                     Console.WriteLine("No figure in this possition. Please enter again.");
                     continue;
                 }
-                else if (chessboard.GetFigureFromPosition(position).Color != game.CurrentPlayer)
+                else if (chessboard.GetFigureFromPosition(position).Color != game.CurrentPlayer.Color)
                 {
                     Console.WriteLine("Can't move a {0} piece as the {1} player. Please enter again.", chessboard.GetFigureFromPosition(position).Color, game.CurrentPlayer);
                     continue;
@@ -142,7 +142,7 @@ namespace Chess
                     Console.WriteLine("Not a valid position. Please enter again.");
                     continue;
                 }
-                else if (chessboard.GetFigureFromPosition(position)?.Color == game.CurrentPlayer)
+                else if (chessboard.GetFigureFromPosition(position)?.Color == game.CurrentPlayer.Color)
                 {
                     Console.WriteLine("Can't move a {0} piece over a {1} peice. Please enter again.", chessboard.GetFigureFromPosition(position).Color, game.CurrentPlayer);
                     continue;

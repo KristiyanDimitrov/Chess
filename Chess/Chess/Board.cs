@@ -59,12 +59,6 @@ namespace Chess
             return Figures[position.Row, position.Column];
         }
 
-        public Figure GetFigurePosition(Figure figure)
-        {
-            Position Position = figure.GettPosition();
-            return Figures[Position.Row, Position.Column];
-        }
-
         public bool ExistFigure(Position position)
         {
             if (ValidatePosition(position))
@@ -90,15 +84,7 @@ namespace Chess
 
         public void MoveFigure(Figure figure, Position position)
         {
-            if (!ValidatePosition(figure.FigurePosition))
-                throw new Exception("Position Invalid");
-
-            // ¬¬¬ Need to check if the figure can move there.
-            Figure taken = GetFigureFromPosition(position);
-            if (taken?.Color == figure.Color)
-                throw new Exception("You alredy have figure in that position");
-            else if (taken != null && taken.Color != figure.Color)
-                ClearFigure(figure);
+            ClearFigure(figure);
             
             figure.SetPosition(position);
             Figures[position.Row, position.Column] = figure;
@@ -110,6 +96,15 @@ namespace Chess
 
             Figures[Position.Row, Position.Column] = figure;
         }
+
+        // Used to validate moves
+        public void MoveShadowFigure(Figure figure, Position position)
+        {
+            ClearFigure(figure);
+            Figures[position.Row, position.Column] = Figures[position.Row, position.Column] ?? figure;
+        }
+        public void ResetShadowMove(Figure figure) => Figures[figure.FigurePosition.Row, figure.FigurePosition.Column] = figure;
+
 
         private void SetPosition(Figure figure, Position position)
         {
@@ -139,7 +134,7 @@ namespace Chess
             return figure;
         }
 
-        public Figure GetKingPosition(Figure.ColorList color) => Figures.Cast<Figure>().ToArray().Where(x => x.GetType().Name == "King" && x.Color == color).FirstOrDefault();
+        public Figure GetKingFigure(Figure.ColorList color) => Figures.Cast<Figure>().ToArray().FirstOrDefault(x => x?.Color == color && x.GetType().Name == "King");
 
         public static int GetLetterMap(char letter)
         {
