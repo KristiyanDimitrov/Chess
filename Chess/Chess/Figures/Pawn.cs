@@ -24,7 +24,7 @@ namespace Chess.Figures
 
                     for (int y = CurPos.Column - 1; y <= CurPos.Column + 1; y+=2)
                     {
-                        if (Math.Abs(CurPos.Row % x) == 1 && (board.ExistFigure(x, y) && board.GetFigureFromPosition(x, y)?.Color != base.Color))
+                        if (Math.Abs(x % CurPos.Row) == 1 && (board.ExistFigure(x, y) && board.GetFigureFromPosition(x, y)?.Color != base.Color))
                             PossiblePositions.Add(new Position(x, y));
                     }
                 }
