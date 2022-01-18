@@ -127,7 +127,7 @@ namespace Chess
 
             while(true)
             {
-                Console.WriteLine("To:");
+                Console.Write("To:");
                 var PositionFrom = Console.ReadLine();
                 if (PositionFrom.ToUpper() == "X")
                     return null;
