@@ -13,6 +13,7 @@ namespace Chess
         public int Columns { get; set; }
         private Figure [,] Figures { get; set; }
         public List<Figure> TakenFigures{ get; private set; }
+        private Figure FigureShadowBuffer = null;
 
         public Board(int rows, int columns)
         {
@@ -59,12 +60,6 @@ namespace Chess
             return Figures[position.Row, position.Column];
         }
 
-        public Figure GetFigurePosition(Figure figure)
-        {
-            Position Position = figure.GettPosition();
-            return Figures[Position.Row, Position.Column];
-        }
-
         public bool ExistFigure(Position position)
         {
             if (ValidatePosition(position))
@@ -90,15 +85,7 @@ namespace Chess
 
         public void MoveFigure(Figure figure, Position position)
         {
-            if (!ValidatePosition(figure.FigurePosition))
-                throw new Exception("Position Invalid");
-
-            // ¬¬¬ Need to check if the figure can move there.
-            Figure taken = GetFigureFromPosition(position);
-            if (taken?.Color == figure.Color)
-                throw new Exception("You alredy have figure in that position");
-            else if (taken != null && taken.Color != figure.Color)
-                ClearFigure(figure);
+            ClearFigure(figure, true);
             
             figure.SetPosition(position);
             Figures[position.Row, position.Column] = figure;
@@ -111,6 +98,32 @@ namespace Chess
             Figures[Position.Row, Position.Column] = figure;
         }
 
+        // Used to validate moves
+        public void MoveShadowFigure(Figure figure, Position position)
+        {
+            ClearFigure(figure, true);
+
+            // If there is a figure in the field of the shadowmove, put it in the buffer
+            if (Figures[position.Row, position.Column] != null)
+                FigureShadowBuffer = Figures[position.Row, position.Column];
+            else
+                Figures[position.Row, position.Column] = figure;
+        }
+        public void ResetShadowMove(Figure figure, Position position) 
+        {
+            Figures[figure.FigurePosition.Row, figure.FigurePosition.Column] = figure;
+
+            if (FigureShadowBuffer != null)
+            {
+                Figures[FigureShadowBuffer.FigurePosition.Row, FigureShadowBuffer.FigurePosition.Column] = FigureShadowBuffer;
+                FigureShadowBuffer = null;
+            } 
+            else
+                Figures[position.Row, position.Column] = null;
+        }
+        
+
+
         private void SetPosition(Figure figure, Position position)
         {
             figure.SetPosition(position.Row, position.Column);
@@ -122,11 +135,12 @@ namespace Chess
             Figures[x, y] = figure;
         }
 
-        private void ClearFigure(Figure figure)
+        private void ClearFigure(Figure figure, bool isMoved = false)
         {
             Position Position = figure.GettPosition();
             Figures[Position.Row, Position.Column] = null;
-            TakenFigures.Add(figure);          
+            if (!isMoved)
+                TakenFigures.Add(figure);          
         }
 
         public Figure ClearPosition(Position position)
@@ -139,7 +153,7 @@ namespace Chess
             return figure;
         }
 
-        public Figure GetKingPosition(Figure.ColorList color) => Figures.Cast<Figure>().ToArray().Where(x => x.GetType().Name == "King" && x.Color == color).FirstOrDefault();
+        public Figure GetKingFigure(Figure.ColorList color) => Figures.Cast<Figure>().ToArray().FirstOrDefault(x => x?.Color == color && x.GetType().Name == "King");
 
         public static int GetLetterMap(char letter)
         {

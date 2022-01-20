@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Chess.Figures;
 using Chess.Figures.Properties;
 
@@ -22,6 +23,8 @@ namespace Chess
 
                 //Get possible moves
                 PossibleMoves = CurrentGame.getPossibleMoves(From);
+                if (!PossibleMoves.Any())
+                    continue;              
 
                 Console.Clear();
                 Print.PrintBoard(CurrentGame.Chessboard, PossibleMoves);
