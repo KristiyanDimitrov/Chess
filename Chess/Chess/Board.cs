@@ -13,6 +13,7 @@ namespace Chess
         public int Columns { get; set; }
         private Figure [,] Figures { get; set; }
         public List<Figure> TakenFigures{ get; private set; }
+        private Figure FigureShadowBuffer = null;
 
         public Board(int rows, int columns)
         {
@@ -84,7 +85,7 @@ namespace Chess
 
         public void MoveFigure(Figure figure, Position position)
         {
-            ClearFigure(figure);
+            ClearFigure(figure, true);
             
             figure.SetPosition(position);
             Figures[position.Row, position.Column] = figure;
@@ -100,10 +101,27 @@ namespace Chess
         // Used to validate moves
         public void MoveShadowFigure(Figure figure, Position position)
         {
-            ClearFigure(figure);
-            Figures[position.Row, position.Column] = Figures[position.Row, position.Column] ?? figure;
+            ClearFigure(figure, true);
+
+            // If there is a figure in the field of the shadowmove, put it in the buffer
+            if (Figures[position.Row, position.Column] != null)
+                FigureShadowBuffer = Figures[position.Row, position.Column];
+            else
+                Figures[position.Row, position.Column] = figure;
         }
-        public void ResetShadowMove(Figure figure) => Figures[figure.FigurePosition.Row, figure.FigurePosition.Column] = figure;
+        public void ResetShadowMove(Figure figure, Position position) 
+        {
+            Figures[figure.FigurePosition.Row, figure.FigurePosition.Column] = figure;
+
+            if (FigureShadowBuffer != null)
+            {
+                Figures[FigureShadowBuffer.FigurePosition.Row, FigureShadowBuffer.FigurePosition.Column] = FigureShadowBuffer;
+                FigureShadowBuffer = null;
+            } 
+            else
+                Figures[position.Row, position.Column] = null;
+        }
+        
 
 
         private void SetPosition(Figure figure, Position position)
@@ -117,11 +135,12 @@ namespace Chess
             Figures[x, y] = figure;
         }
 
-        private void ClearFigure(Figure figure)
+        private void ClearFigure(Figure figure, bool isMoved = false)
         {
             Position Position = figure.GettPosition();
             Figures[Position.Row, Position.Column] = null;
-            TakenFigures.Add(figure);          
+            if (!isMoved)
+                TakenFigures.Add(figure);          
         }
 
         public Figure ClearPosition(Position position)

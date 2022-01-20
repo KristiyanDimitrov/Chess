@@ -88,9 +88,10 @@ namespace Chess
 
         public void KingCheck(Figure.ColorList color, Figure selectedFigure, List<Position> moves)
         {
-            Figure TheKing = Chessboard.GetKingFigure(color);
+            Position TheKingPos = Chessboard.GetKingFigure(color).GettPosition();
+            List<Position> MovesToRemove = new List<Position>();
 
-            foreach(Position pos in moves)
+            foreach (Position pos in moves)
             {
                 Chessboard.MoveShadowFigure(selectedFigure, pos);
 
@@ -102,15 +103,21 @@ namespace Chess
                         if (CurFigure == null || CurFigure?.Color == color)
                             continue;
 
+                        // If the potental move puts the frendly King in danger remove it from the list of possible moves.
                         List<Position> CurFigurePossibleMoves = CurFigure.PossibleMoves(Chessboard);
-                        moves = moves.Where(x => !CurFigurePossibleMoves.Contains(x)).ToList();
-    
+                        if (CurFigurePossibleMoves.Exists(move => move.Column == TheKingPos.Column && move.Row == TheKingPos.Row))
+                            MovesToRemove.Add(pos);
                     }
                 }
-                Chessboard.ResetShadowMove(selectedFigure);
+
+                Chessboard.ResetShadowMove(selectedFigure, pos);
             }
 
-            
+            foreach (Position move in MovesToRemove)
+            {
+                moves.RemoveAll(x => x.Column == move.Column && x.Row == move.Row); // FIX removing from list ¬¬¬¬¬¬¬¬¬
+            }
+
         }
     }
 }
