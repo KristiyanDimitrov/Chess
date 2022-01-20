@@ -43,6 +43,7 @@ namespace Chess
             Console.ResetColor();
 
             PrintTakenFigures(chessBoard);
+            possibleMoves = null;
         }
 
         private static void PrintPiece(Figure figure, bool isPossbile)
@@ -174,6 +175,5 @@ namespace Chess
 
             Console.WriteLine("\n\n");
         }
-
     } 
 }

@@ -83,7 +83,7 @@ namespace Chess
             //Remove moves that will put frendly King in Check
             KingCheck(SelectedFigure.Color, SelectedFigure, PossibleMoves);
 
-            return SelectedFigure.PossibleMoves(Chessboard);
+            return PossibleMoves;
         }
 
         public void KingCheck(Figure.ColorList color, Figure selectedFigure, List<Position> moves)
@@ -114,9 +114,7 @@ namespace Chess
             }
 
             foreach (Position move in MovesToRemove)
-            {
-                moves.RemoveAll(x => x.Column == move.Column && x.Row == move.Row); // FIX removing from list ¬¬¬¬¬¬¬¬¬
-            }
+                moves.RemoveAll(x => x.Column == move.Column && x.Row == move.Row);
 
         }
     }
