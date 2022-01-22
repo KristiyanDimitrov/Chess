@@ -98,6 +98,12 @@ namespace Chess
                 Console.Write("From:");
                 var PositionFrom = Console.ReadLine();
 
+                if (PositionFrom.Count() !=2)
+                {
+                    Console.WriteLine("Not a valid position. Please enter again.");
+                    continue;
+                }
+
                 x = Char.IsDigit(PositionFrom[0]) ? (int)Char.GetNumericValue(PositionFrom[0]) -1 : -1;
                 y = Board.GetLetterMap(PositionFrom[1]);
 
