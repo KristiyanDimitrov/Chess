@@ -34,6 +34,18 @@ namespace Chess.Figures
             return PossiblePositions;
         }
 
+        public override void SetPosition(int row, int column)
+        {
+            FirstMove = false;
+            base.SetPosition(row, column);
+        }
+
+        public override void SetPosition(Position position)
+        {
+            FirstMove = false;
+            base.SetPosition(position);
+        }
         public override string ToString() => "R";
+        private bool FirstMove = true;
     }
 }

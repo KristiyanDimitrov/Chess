@@ -37,13 +37,7 @@ namespace Chess
                     continue;
 
                 CurrentGame.PlayMove(From, To);
-
-
-
             }
-
-
-
         }
     }
 }
