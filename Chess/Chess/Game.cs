@@ -85,7 +85,12 @@ namespace Chess
 
             return PossibleMoves;
         }
-
+        /*
+            This method uses "ShadowMoves" to check the consequences of a move. A ShadowMove consists of making the move in a controlled and reversable way,
+        in order to use the existing methods of checking possible moves. 
+            This helps to check if the state of the board after a move is valid. For example if it puts a friendly king in danger. 
+            
+        */
         public void KingCheck(Figure.ColorList color, Figure selectedFigure, List<Position> moves)
         {
             Position TheKingPos = Chessboard.GetKingFigure(color).GettPosition();
