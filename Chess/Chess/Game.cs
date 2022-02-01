@@ -29,38 +29,38 @@ namespace Chess
         {
 
             Chessboard.MoveFigure(new Rook(7, 0, Figure.ColorList.White));
-            Chessboard.MoveFigure(new Knight(7, 1, Figure.ColorList.White));
-            Chessboard.MoveFigure(new Bishop(7, 2, Figure.ColorList.White));
+            //Chessboard.MoveFigure(new Knight(7, 1, Figure.ColorList.White));
+            //Chessboard.MoveFigure(new Bishop(7, 2, Figure.ColorList.White));
             Chessboard.MoveFigure(new Queen(7, 3, Figure.ColorList.White));
             Chessboard.MoveFigure(new King(7, 4, Figure.ColorList.White));
-            Chessboard.MoveFigure(new Bishop(7, 5, Figure.ColorList.White));
-            Chessboard.MoveFigure(new Knight(7, 6, Figure.ColorList.White));
+            //Chessboard.MoveFigure(new Bishop(7, 5, Figure.ColorList.White));
+            //Chessboard.MoveFigure(new Knight(7, 6, Figure.ColorList.White));
             Chessboard.MoveFigure(new Rook(7, 7, Figure.ColorList.White));
-            Chessboard.MoveFigure(new Pawn(6, 0, Figure.ColorList.White));
-            Chessboard.MoveFigure(new Pawn(6, 1, Figure.ColorList.White));
-            Chessboard.MoveFigure(new Pawn(6, 2, Figure.ColorList.White));
-            Chessboard.MoveFigure(new Pawn(6, 3, Figure.ColorList.White));
-            Chessboard.MoveFigure(new Pawn(6, 4, Figure.ColorList.White));
-            Chessboard.MoveFigure(new Pawn(6, 5, Figure.ColorList.White));
-            Chessboard.MoveFigure(new Pawn(6, 6, Figure.ColorList.White));
-            Chessboard.MoveFigure(new Pawn(6, 7, Figure.ColorList.White));
+            //Chessboard.MoveFigure(new Pawn(6, 0, Figure.ColorList.White));
+            //Chessboard.MoveFigure(new Pawn(6, 1, Figure.ColorList.White));
+            //Chessboard.MoveFigure(new Pawn(6, 2, Figure.ColorList.White));
+            //Chessboard.MoveFigure(new Pawn(6, 3, Figure.ColorList.White));
+            //Chessboard.MoveFigure(new Pawn(6, 4, Figure.ColorList.White));
+            //Chessboard.MoveFigure(new Pawn(6, 5, Figure.ColorList.White));
+            //Chessboard.MoveFigure(new Pawn(6, 6, Figure.ColorList.White));
+            //Chessboard.MoveFigure(new Pawn(6, 7, Figure.ColorList.White));
 
             Chessboard.MoveFigure(new Rook(0, 0, Figure.ColorList.Black));
-            Chessboard.MoveFigure(new Knight(0, 1, Figure.ColorList.Black));
-            Chessboard.MoveFigure(new Bishop(0, 2, Figure.ColorList.Black));
+            //Chessboard.MoveFigure(new Knight(0, 1, Figure.ColorList.Black));
+            //Chessboard.MoveFigure(new Bishop(0, 2, Figure.ColorList.Black));
             Chessboard.MoveFigure(new Queen(0, 3, Figure.ColorList.Black));
             Chessboard.MoveFigure(new King(0, 4, Figure.ColorList.Black));
-            Chessboard.MoveFigure(new Bishop(0, 5, Figure.ColorList.Black));
-            Chessboard.MoveFigure(new Knight(0, 6, Figure.ColorList.Black));
+            //Chessboard.MoveFigure(new Bishop(0, 5, Figure.ColorList.Black));
+            //Chessboard.MoveFigure(new Knight(0, 6, Figure.ColorList.Black));
             Chessboard.MoveFigure(new Rook(0, 7, Figure.ColorList.Black));
-            Chessboard.MoveFigure(new Pawn(1, 0, Figure.ColorList.Black));
-            Chessboard.MoveFigure(new Pawn(1, 1, Figure.ColorList.Black));
-            Chessboard.MoveFigure(new Pawn(1, 2, Figure.ColorList.Black));
-            Chessboard.MoveFigure(new Pawn(1, 3, Figure.ColorList.Black));
-            Chessboard.MoveFigure(new Pawn(1, 4, Figure.ColorList.Black));
-            Chessboard.MoveFigure(new Pawn(1, 5, Figure.ColorList.Black));
-            Chessboard.MoveFigure(new Pawn(1, 6, Figure.ColorList.Black));
-            Chessboard.MoveFigure(new Pawn(1, 7, Figure.ColorList.Black));
+            //Chessboard.MoveFigure(new Pawn(1, 0, Figure.ColorList.Black));
+            //Chessboard.MoveFigure(new Pawn(1, 1, Figure.ColorList.Black));
+            //Chessboard.MoveFigure(new Pawn(1, 2, Figure.ColorList.Black));
+            //Chessboard.MoveFigure(new Pawn(1, 3, Figure.ColorList.Black));
+            //Chessboard.MoveFigure(new Pawn(1, 4, Figure.ColorList.Black));
+            //Chessboard.MoveFigure(new Pawn(1, 5, Figure.ColorList.Black));
+            //Chessboard.MoveFigure(new Pawn(1, 6, Figure.ColorList.Black));
+            //Chessboard.MoveFigure(new Pawn(1, 7, Figure.ColorList.Black));
 
             Players[0] = new Player(Figure.ColorList.White);
             Players[1] = new Player(Figure.ColorList.Black);
@@ -81,14 +81,10 @@ namespace Chess
         {
             Figure SelectedFigure = Chessboard.GetFigureFromPosition(from);
             List<Position> PossibleMoves = SelectedFigure.PossibleMoves(Chessboard);
-
-            // Castle move special case. Prevent Castle move if the Kings path is under attack.
-            bool ToCastleCheck = SelectedFigure is King && ((King)SelectedFigure).CastleMovePossible ? true : false;
-
             
             // Position CastleMove = PossibleMoves.FirstOrDefault(x => Math.Abs(x.Column - SelectedFigure.GettPosition().Column) == 2);
 
-            KingCheck(SelectedFigure.Color, SelectedFigure, PossibleMoves, ToCastleCheck);//Remove moves that will put friendly King in Check
+            KingCheck(SelectedFigure.Color, SelectedFigure, PossibleMoves);//Remove moves that will put friendly King in Check
 
             return PossibleMoves;
         }
@@ -100,15 +96,18 @@ namespace Chess
         
             This method is also checks if friendly king is in danger during the Castle move.
         */
-        private void KingCheck(Figure.ColorList color, Figure selectedFigure, List<Position> moves, bool toCastleCheck = false)
+        private void KingCheck(Figure.ColorList color, Figure selectedFigure, List<Position> moves)
         {
             Position TheKingPos = Chessboard.GetKingFigure(color).GettPosition(); // When the figure to move is the King this breaks the logic ¬¬¬¬¬¬¬
             List<Position> MovesToRemove = new List<Position>();
 
-            Position CastleMove = moves.FirstOrDefault(x => Math.Abs(x.Column - SelectedFigure.GettPosition().Column) == 2);
+            // Used for validation of the field the King jumps over.
+            Position CastleMove = selectedFigure is not King ? null : moves.FirstOrDefault(x => Math.Abs(x.Column - selectedFigure.GettPosition().Column) == 2);          
+
 
             foreach (Position pos in moves)
             {
+                TheKingPos = selectedFigure is King ? pos : TheKingPos;
                 Chessboard.MoveShadowFigure(selectedFigure, pos);
 
                 for (int x = Chessboard.Rows - 1; x >= 0; x--)
@@ -119,14 +118,15 @@ namespace Chess
                         if (CurFigure == null || CurFigure?.Color == color)
                             continue;
 
-                        // If the potential move puts the friendly King in danger remove it from the list of possible moves.
+                        // If the potential move puts the friendly King in danger remove it from the list of possible moves
                         List<Position> CurFigurePossibleMoves = CurFigure.PossibleMoves(Chessboard);
                         if (CurFigurePossibleMoves.Exists(move => move.Column == TheKingPos.Column && move.Row == TheKingPos.Row))
-                            if(toCastleCheck && )
-                                
                             MovesToRemove.Add(pos);
                     }
                 }
+                // Castle Move Jump: Check if the previous field was not under attack
+                if (CastleMove != null && MovesToRemove.Exists(x => x.Column == (CastleMove.Column-1)))
+                    MovesToRemove.Add(CastleMove);
 
                 Chessboard.ResetShadowMove(selectedFigure, pos);
             }
