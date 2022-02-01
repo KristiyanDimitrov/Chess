@@ -93,7 +93,7 @@ namespace Chess
 
         public void MoveFigure(Figure figure) // For intialising the board
         {
-            Position Position = figure.GettPosition();
+            Position Position = figure.GetPosition();
 
             Figures[Position.Row, Position.Column] = figure;
         }
@@ -137,7 +137,7 @@ namespace Chess
 
         private void ClearFigure(Figure figure, bool isMoved = false)
         {
-            Position Position = figure.GettPosition();
+            Position Position = figure.GetPosition();
             Figures[Position.Row, Position.Column] = null;
             if (!isMoved)
                 TakenFigures.Add(figure);          

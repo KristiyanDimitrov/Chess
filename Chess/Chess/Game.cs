@@ -69,10 +69,29 @@ namespace Chess
         public void PlayMove(Position from, Position to)
         {
             Figure SelectedFigure = Chessboard.ClearPosition(from);
-            SelectedFigure.IsFirstMove = false;
+            
+
+            //Castling move - Handling the Rook
+            if (SelectedFigure is King)
+                if (Math.Abs(SelectedFigure.FigurePosition.Column - to.Column) == 2)
+                {
+                    Rook theRook = ((King) SelectedFigure).GetCastleMoveRook(to);
+                    int kingToRookDistance = SelectedFigure.FigurePosition.Column - theRook.GetPosition().Column;
+                    int offset;
+
+                    if (kingToRookDistance > 0)
+                        offset = -1;
+                    else
+                        offset = 1;
+
+                    Chessboard.MoveFigure(theRook, new Position(SelectedFigure.FigurePosition.Row, SelectedFigure.FigurePosition.Column + offset));
+                }
 
             Chessboard.MoveFigure(SelectedFigure, to);
+
+
             CurrentPlayer = CurrentPlayer.Color == Figure.ColorList.White ? Players.Where(x => x.Color == Figure.ColorList.Black).FirstOrDefault() : Players.Where(x => x.Color == Figure.ColorList.White).FirstOrDefault();
+            SelectedFigure.IsFirstMove = false;
 
             KingInCheckUpdate(CurrentPlayer);
         }
@@ -98,11 +117,11 @@ namespace Chess
         */
         private void KingCheck(Figure.ColorList color, Figure selectedFigure, List<Position> moves)
         {
-            Position TheKingPos = Chessboard.GetKingFigure(color).GettPosition(); // When the figure to move is the King this breaks the logic ¬¬¬¬¬¬¬
+            Position TheKingPos = Chessboard.GetKingFigure(color).GetPosition(); // When the figure to move is the King this breaks the logic ¬¬¬¬¬¬¬
             List<Position> MovesToRemove = new List<Position>();
 
             // Used for validation of the field the King jumps over.
-            Position CastleMove = selectedFigure is not King ? null : moves.FirstOrDefault(x => Math.Abs(x.Column - selectedFigure.GettPosition().Column) == 2);          
+            Position CastleMove = selectedFigure is not King ? null : moves.FirstOrDefault(x => Math.Abs(x.Column - selectedFigure.GetPosition().Column) == 2);          
 
 
             foreach (Position pos in moves)

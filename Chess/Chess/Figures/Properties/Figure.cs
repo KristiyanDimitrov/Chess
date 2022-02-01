@@ -30,7 +30,7 @@ namespace Chess.Figures.Properties
             FigurePosition.SetPosition(position.Row, position.Column);
         }
 
-        public Position GettPosition()
+        public Position GetPosition()
         {
             return FigurePosition;
         }
