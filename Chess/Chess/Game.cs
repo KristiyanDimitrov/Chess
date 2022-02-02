@@ -75,16 +75,8 @@ namespace Chess
             if (SelectedFigure is King)
                 if (Math.Abs(SelectedFigure.FigurePosition.Column - to.Column) == 2)
                 {
-                    Rook theRook = ((King) SelectedFigure).GetCastleMoveRook(to);
-                    int kingToRookDistance = SelectedFigure.FigurePosition.Column - theRook.GetPosition().Column;
-                    int offset;
-
-                    if (kingToRookDistance > 0)
-                        offset = -1;
-                    else
-                        offset = 1;
-
-                    Chessboard.MoveFigure(theRook, new Position(SelectedFigure.FigurePosition.Row, SelectedFigure.FigurePosition.Column + offset));
+                    Tuple<Rook, Position> RookMove = ((King) SelectedFigure).GetCastleMoveRook(to);
+                    Chessboard.MoveFigure(RookMove.Item1, RookMove.Item2);
                 }
 
             Chessboard.MoveFigure(SelectedFigure, to);
@@ -119,10 +111,7 @@ namespace Chess
         {
             Position TheKingPos = Chessboard.GetKingFigure(color).GetPosition(); // When the figure to move is the King this breaks the logic ¬¬¬¬¬¬¬
             List<Position> MovesToRemove = new List<Position>();
-
-            // Used for validation of the field the King jumps over.
-            Position CastleMove = selectedFigure is not King ? null : moves.FirstOrDefault(x => Math.Abs(x.Column - selectedFigure.GetPosition().Column) == 2);          
-
+     
 
             foreach (Position pos in moves)
             {
@@ -144,8 +133,15 @@ namespace Chess
                     }
                 }
                 // Castle Move Jump: Check if the previous field was not under attack
-                if (CastleMove != null && MovesToRemove.Exists(x => x.Column == (CastleMove.Column-1)))
-                    MovesToRemove.Add(CastleMove);
+                if (selectedFigure is King && Math.Abs(Chessboard.GetKingFigure(color).GetPosition().Column - pos.Column) == 2)
+                {
+                    Tuple<Rook, Position> castleRookMove = ((King)Chessboard.GetKingFigure(color)).GetCastleMoveRook(pos);
+
+                    if (!moves.Exists(x => x.Row == (castleRookMove.Item2.Row) && x.Column == (castleRookMove.Item2.Column)) // Check if the field that is jumped is a valid move
+                            || MovesToRemove.Exists(s => s.Row == (castleRookMove.Item2.Row) && s.Column == (castleRookMove.Item2.Column)))  // or if it is going to be removed.
+                        MovesToRemove.Add(pos);
+                }
+                
 
                 Chessboard.ResetShadowMove(selectedFigure, pos);
             }

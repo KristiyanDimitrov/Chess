@@ -11,7 +11,7 @@ namespace Chess.Figures
         public King(int row, int column, ColorList color) : base(row, column, color) { }
         public bool KingInCheck { get; set; } = false;
         private Dictionary<Position, Rook> _castleMoveRook = new();
-        private bool FirstMove = true;
+        private bool _isFiirstMove = true;
         
         public override List<Position> PossibleMoves(Board board)
         {
@@ -28,7 +28,7 @@ namespace Chess.Figures
 
             
             // Castle move. The validation for fields under attack is done outside of this class in Game.GetPossibleMoves().
-            if (FirstMove && !KingInCheck)
+            if (_isFiirstMove && !KingInCheck)
             {
                 for (int y = Y; y >= 0; y--)
                 {
@@ -55,23 +55,33 @@ namespace Chess.Figures
         }
         public override void SetPosition(int row, int column)
         {
-            FirstMove = false;
+            _isFiirstMove = false;
             base.SetPosition(row, column);
         }
 
         public override void SetPosition(Position position)
         {
-            FirstMove = false;
+            _isFiirstMove = false;
             base.SetPosition(position);
         }
 
         public override string ToString() => "K";
 
-        public Rook GetCastleMoveRook(Position pos)
+        public Tuple<Rook,Position> GetCastleMoveRook(Position kingMoveTo)
         {
-            Position key = _castleMoveRook.Keys.FirstOrDefault(x => x.Column == pos.Column && x.Row == pos.Row);
+            Position key = _castleMoveRook.Keys.FirstOrDefault(x => x.Column == kingMoveTo.Column && x.Row == kingMoveTo.Row);
 
-            return _castleMoveRook[key];
+            if (Math.Abs(FigurePosition.Column - kingMoveTo.Column) == 2)
+            {
+                Rook theRook = _castleMoveRook[key];
+
+                int kingToRookDistance = FigurePosition.Column - theRook.GetPosition().Column;
+                int offset = kingToRookDistance > 0 ? -1 : 1;
+
+                return Tuple.Create(theRook, new Position(FigurePosition.Row, FigurePosition.Column + offset));
+            }
+
+            return null;
         }
     }
 }
