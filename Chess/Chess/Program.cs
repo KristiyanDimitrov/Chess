@@ -10,18 +10,17 @@ namespace Chess
         static void Main()
         {
             Game currentGame = new();
-            List<Position> possibleMoves;
 
             while (!currentGame.GameEnded)
             {
                 Console.Clear();
                 Print.PrintBoard(currentGame.Chessboard);
 
-                //Validates position is valid and it contains a figure that coresponds to the current player color
+                //Validates position is valid and it contains a figure that corresponds to the current player color
                 Position @from = Print.GetPositionFrom_User(currentGame);
 
                 //Get possible moves
-                possibleMoves = currentGame.GetPossibleMoves(@from);
+                List<Position> possibleMoves = currentGame.GetPossibleMoves(@from);
                 if (!possibleMoves.Any())
                     continue;              
 
