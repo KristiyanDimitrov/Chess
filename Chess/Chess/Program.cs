@@ -1,42 +1,41 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Chess.Figures;
 using Chess.Figures.Properties;
 
 namespace Chess
 {
     class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
-            Game CurrentGame = new Game();
-            List<Position> PossibleMoves = new List<Position>();
+            Game currentGame = new();
+            List<Position> possibleMoves;
 
-            while (!CurrentGame.GameEnded)
+            while (!currentGame.GameEnded)
             {
                 Console.Clear();
-                Print.PrintBoard(CurrentGame.Chessboard);
+                Print.PrintBoard(currentGame.Chessboard);
 
                 //Validates position is valid and it contains a figure that coresponds to the current player color
-                Position From = Print.GetPositionFrom_User(CurrentGame);
+                Position @from = Print.GetPositionFrom_User(currentGame);
 
                 //Get possible moves
-                PossibleMoves = CurrentGame.GetPossibleMoves(From);
-                if (!PossibleMoves.Any())
+                possibleMoves = currentGame.GetPossibleMoves(@from);
+                if (!possibleMoves.Any())
                     continue;              
 
                 Console.Clear();
-                Print.PrintBoard(CurrentGame.Chessboard, PossibleMoves);
+                Print.PrintBoard(currentGame.Chessboard, possibleMoves);
 
                 //Validates it is a valid position
-                Position To = Print.GetPositionTo_User(CurrentGame, PossibleMoves);
+                Position to = Print.GetPositionTo_User(currentGame, possibleMoves);
 
                 //Play the selected move
-                if (To == null)
+                if (to == null)
                     continue;
 
-                CurrentGame.PlayMove(From, To);
+                currentGame.PlayMove(@from, to);
             }
         }
     }

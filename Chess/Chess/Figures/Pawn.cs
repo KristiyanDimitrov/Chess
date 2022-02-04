@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Chess.Figures.Properties;
 
 namespace Chess.Figures
@@ -12,54 +10,54 @@ namespace Chess.Figures
 
         public override List<Position> PossibleMoves(Board board)
         {
-            List<Position> PossiblePositions = new List<Position>();
-            Position CurPos= base.FigurePosition;
+            List<Position> possiblePositions = new();
+            Position curPos= base.FigurePosition;
 
             if (base.Color == ColorList.Black)
             {
-                for (int x = CurPos.Row + 1; x <= CurPos.Row + 1 + Convert.ToInt32(FirstMove); x++)
+                for (int x = curPos.Row + 1; x <= curPos.Row + 1 + Convert.ToInt32(_firstMove); x++)
                 {
-                    if (!board.ExistFigure(x, CurPos.Column) && (x == CurPos.Row + 1 || PossiblePositions.Exists(z => z.Row == CurPos.Row + 1 && z.Column == CurPos.Column)))
-                        PossiblePositions.Add(new Position(x, CurPos.Column));
+                    if (!board.ExistFigure(x, curPos.Column) && (x == curPos.Row + 1 || possiblePositions.Exists(z => z.Row == curPos.Row + 1 && z.Column == curPos.Column)))
+                        possiblePositions.Add(new Position(x, curPos.Column));
 
-                    for (int y = CurPos.Column - 1; y <= CurPos.Column + 1; y+=2)
+                    for (int y = curPos.Column - 1; y <= curPos.Column + 1; y+=2)
                     {
-                        if (Math.Abs(x % CurPos.Row) == 1 && (board.ExistFigure(x, y) && board.GetFigureFromPosition(x, y)?.Color != base.Color))
-                            PossiblePositions.Add(new Position(x, y));
+                        if (Math.Abs(x % curPos.Row) == 1 && (board.ExistFigure(x, y) && board.GetFigureFromPosition(x, y)?.Color != base.Color))
+                            possiblePositions.Add(new Position(x, y));
                     }
                 }
             }
             else
             {
-                for (int x = CurPos.Row - 1; x >= CurPos.Row - 1 - Convert.ToInt32(FirstMove); x--)
+                for (int x = curPos.Row - 1; x >= curPos.Row - 1 - Convert.ToInt32(_firstMove); x--)
                 {
-                    if (!board.ExistFigure(x, CurPos.Column) && (x == CurPos.Row - 1 || PossiblePositions.Exists( z => z.Row == CurPos.Row - 1 && z.Column == CurPos.Column)))
-                        PossiblePositions.Add(new Position(x, CurPos.Column));
+                    if (!board.ExistFigure(x, curPos.Column) && (x == curPos.Row - 1 || possiblePositions.Exists( z => z.Row == curPos.Row - 1 && z.Column == curPos.Column)))
+                        possiblePositions.Add(new Position(x, curPos.Column));
 
-                    for (int y = CurPos.Column - 1; y <= CurPos.Column + 1; y+=2)
+                    for (int y = curPos.Column - 1; y <= curPos.Column + 1; y+=2)
                     {
-                        if ( Math.Abs(CurPos.Row % x) == 1 && (board.ExistFigure(x,y) && board.GetFigureFromPosition(x, y)?.Color != base.Color))
-                            PossiblePositions.Add(new Position(x, y));
+                        if ( Math.Abs(curPos.Row % x) == 1 && (board.ExistFigure(x,y) && board.GetFigureFromPosition(x, y)?.Color != base.Color))
+                            possiblePositions.Add(new Position(x, y));
                     }
                 }
             }
             
-            return PossiblePositions;
+            return possiblePositions;
         }
 
         public override void SetPosition(int row, int column)
         {
-            FirstMove = false;
+            _firstMove = false;
             base.SetPosition(row, column);
         }
 
         public override void SetPosition(Position position)
         {
-            FirstMove = false;
+            _firstMove = false;
             base.SetPosition(position);
         }
 
         public override string ToString() => "P";
-        private bool FirstMove = true;
+        private bool _firstMove = true;
     }
 }

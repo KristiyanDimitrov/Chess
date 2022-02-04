@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using Chess.Figures.Properties;
 
 namespace Chess.Figures
@@ -11,40 +9,40 @@ namespace Chess.Figures
 
         public override List<Position> PossibleMoves(Board board)
         {
-            List<Position> PossiblePositions = new List<Position>();
-            Position CurPos = base.FigurePosition;
-            int X = CurPos.Row;
-            int Y = CurPos.Column;
+            List<Position> possiblePositions = new();
+            Position curPos = base.FigurePosition;
+            int x = curPos.Row;
+            int y = curPos.Column;
 
-            bool X_Pos, X_Neg, Y_Pos, Y_Neg; // Indicator if the movement to a given direction is blocked
-            X_Pos = X_Neg = Y_Pos = Y_Neg = true;
+            bool xPos, xNeg, yPos, yNeg; // Indicator if the movement to a given direction is blocked
+            xPos = xNeg = yPos = yNeg = true;
 
             // Straing movements
-            for (int i = 1; true; i++)
+            for (int i = 1;; i++)
             {
-                X_Pos = X_Pos ? board.BasicMoveValidate(PossiblePositions, this, X + i, Y) : false;
-                Y_Neg = Y_Neg ? board.BasicMoveValidate(PossiblePositions, this, X, Y - i) : false;
-                X_Neg = X_Neg ? board.BasicMoveValidate(PossiblePositions, this, X - i, Y) : false;
-                Y_Pos = Y_Pos ? board.BasicMoveValidate(PossiblePositions, this, X, Y + i) : false;
+                xPos = xPos ? board.BasicMoveValidate(possiblePositions, this, x + i, y) : false;
+                yNeg = yNeg ? board.BasicMoveValidate(possiblePositions, this, x, y - i) : false;
+                xNeg = xNeg ? board.BasicMoveValidate(possiblePositions, this, x - i, y) : false;
+                yPos = yPos ? board.BasicMoveValidate(possiblePositions, this, x, y + i) : false;
 
-                if (!X_Pos && !X_Neg && !Y_Pos && !Y_Neg)
+                if (!xPos && !xNeg && !yPos && !yNeg)
                     break;
             }
 
-            X_Pos = X_Neg = Y_Pos = Y_Neg = true;
+            xPos = xNeg = yPos = yNeg = true;
             // Diagonal movement
-            for (int i = 1; true; i++)
+            for (int i = 1;; i++)
             {
-                X_Pos = X_Pos ? board.BasicMoveValidate(PossiblePositions, this, X + i, Y + i) : false;
-                Y_Neg = Y_Neg ? board.BasicMoveValidate(PossiblePositions, this, X + i, Y - i) : false;
-                X_Neg = X_Neg ? board.BasicMoveValidate(PossiblePositions, this, X - i, Y - i) : false;
-                Y_Pos = Y_Pos ? board.BasicMoveValidate(PossiblePositions, this, X - i, Y + i) : false;
+                xPos = xPos ? board.BasicMoveValidate(possiblePositions, this, x + i, y + i) : false;
+                yNeg = yNeg ? board.BasicMoveValidate(possiblePositions, this, x + i, y - i) : false;
+                xNeg = xNeg ? board.BasicMoveValidate(possiblePositions, this, x - i, y - i) : false;
+                yPos = yPos ? board.BasicMoveValidate(possiblePositions, this, x - i, y + i) : false;
 
-                if (!X_Pos && !X_Neg && !Y_Pos && !Y_Neg)
+                if (!xPos && !xNeg && !yPos && !yNeg)
                     break;
             }
 
-            return PossiblePositions;
+            return possiblePositions;
         }
 
         public override string ToString() => "Q";

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Chess.Figures.Properties;
 
 namespace Chess
@@ -16,8 +15,8 @@ namespace Chess
             Console.WriteLine("\n   A B C D E F G H\n");
             Console.ResetColor();
 
-            Figure Figure;
-            bool MoveIsPossible = false;
+            Figure figure;
+            bool moveIsPossible;
 
             for (int x = chessBoard.Rows-1; x >= 0 ; x--)
             {
@@ -27,11 +26,10 @@ namespace Chess
 
                 for (int y = 0; y <= chessBoard.Columns - 1; y++)
                 {                 
-                    Figure = chessBoard.GetFigureFromPosition(x, y);
-                    int test = possibleMoves.Where(el => el.Row == x && el.Column == y).Count();
-                    MoveIsPossible = possibleMoves.Where(el => el.Row == x && el.Column == y).Count() == 1;
+                    figure = chessBoard.GetFigureFromPosition(x, y);
+                    moveIsPossible = possibleMoves.Where(el => el.Row == x && el.Column == y).Count() == 1;
 
-                    PrintPiece(Figure, MoveIsPossible);
+                    PrintPiece(figure, moveIsPossible);
                 }
                 Console.WriteLine();
 
@@ -43,14 +41,13 @@ namespace Chess
             Console.ResetColor();
 
             PrintTakenFigures(chessBoard);
-            possibleMoves = null;
         }
 
         private static void PrintPiece(Figure figure, bool isPossbile)
         {
             if (figure == null && !isPossbile)
                 Console.Write("+ ");
-            else if (figure == null && isPossbile)
+            else if (figure == null)
             {
                 Console.ForegroundColor = ConsoleColor.Blue;
                 Console.Write("+ ");
@@ -89,35 +86,33 @@ namespace Chess
 
         public static Position GetPositionFrom_User(Game game)
         {
-            int x = -1, y = -1;
+            int x, y;
             Board chessboard = game.Chessboard;
             Position position;
 
             while (true)
             {
                 Console.Write("From:");
-                var PositionFrom = Console.ReadLine();
+                string positionFrom = Console.ReadLine() ?? "";
 
-                if (PositionFrom.Count() !=2)
+                if (positionFrom.Count() !=2)
                 {
                     Console.WriteLine("Not a valid position. Please enter again.");
                     continue;
                 }
 
-                x = Char.IsDigit(PositionFrom[0]) ? (int)Char.GetNumericValue(PositionFrom[0]) -1 : -1;
-                y = Board.GetLetterMap(PositionFrom[1]);
+                x = Char.IsDigit(positionFrom[0]) ? (int)Char.GetNumericValue(positionFrom[0]) -1 : -1;
+                y = Board.GetLetterMap(positionFrom[1]);
 
                 position = new Position(x, y);
 
                 if (!chessboard.ExistFigure(position))
                 {
                     Console.WriteLine("No figure in this position. Please enter again.");
-                    continue;
                 }
                 else if (chessboard.GetFigureFromPosition(position).Color != game.CurrentPlayer.Color)
                 {
                     Console.WriteLine("Can't move a {0} piece as the {1} player. Please enter again.", chessboard.GetFigureFromPosition(position).Color, game.CurrentPlayer);
-                    continue;
                 }
                 else
                     break;
@@ -128,31 +123,29 @@ namespace Chess
 
         public static Position GetPositionTo_User(Game game, List<Position> possibleMoves)
         {
-            int x = -1, y = -1;
+            int x, y;
             Board chessboard = game.Chessboard;
             Position position;
 
             while(true)
             {
                 Console.Write("To:");
-                var PositionFrom = Console.ReadLine();
-                if (PositionFrom.ToUpper() == "X")
+                string positionFrom = Console.ReadLine() ?? "";
+                if (positionFrom.ToUpper() == "X")
                     return null;
 
-                x = Char.IsDigit(PositionFrom[0]) ? (int)Char.GetNumericValue(PositionFrom[0]) -1 : -1;
-                y = Board.GetLetterMap(PositionFrom[1]);
+                x = Char.IsDigit(positionFrom[0]) ? (int)Char.GetNumericValue(positionFrom[0]) -1 : -1;
+                y = Board.GetLetterMap(positionFrom[1]);
 
                 position = new Position(x, y);
 
                 if (!chessboard.ValidatePosition(position) || !possibleMoves.Exists(z => z.Row == x && z.Column == y))
                 {
                     Console.WriteLine("Not a valid position. Please enter again.");
-                    continue;
                 }
                 else if (chessboard.GetFigureFromPosition(position)?.Color == game.CurrentPlayer.Color)
                 {
                     Console.WriteLine("Can't move a {0} piece over a {1} peice. Please enter again.", chessboard.GetFigureFromPosition(position).Color, game.CurrentPlayer);
-                    continue;
                 }
                 else
                     break;

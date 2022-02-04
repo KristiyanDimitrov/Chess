@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using Chess.Figures.Properties;
 
 namespace Chess.Figures
@@ -9,43 +7,44 @@ namespace Chess.Figures
     {
         public Rook(int row, int column, ColorList color) : base(row, column, color) { }
 
+        public bool IsFirstMove { get; private set; } = true;
+
         public override List<Position> PossibleMoves(Board board)
         {
-            List<Position> PossiblePositions = new List<Position>();
-            Position CurPos = base.FigurePosition;
+            List<Position> possiblePositions = new();
+            Position curPos = base.FigurePosition;
 
-            int X = CurPos.Row;
-            int Y = CurPos.Column;
+            int curRow = curPos.Row;
+            int curCol = curPos.Column;
 
-            bool X_Pos, X_Neg, Y_Pos, Y_Neg; // Indicator if the movement to a given direction is blocked
-            X_Pos = X_Neg = Y_Pos = Y_Neg = true;
+            bool xPos, xNeg, yPos, yNeg; // Indicator if the movement to a given direction is blocked
+            xPos = xNeg = yPos = yNeg = true;
 
-            for (int i = 1; true; i++)
+            for (int i = 1;; i++)
             {
-                X_Pos = X_Pos ? board.BasicMoveValidate(PossiblePositions, this, X + i, Y) : false;
-                Y_Neg = Y_Neg ? board.BasicMoveValidate(PossiblePositions, this, X, Y - i) : false;
-                X_Neg = X_Neg ? board.BasicMoveValidate(PossiblePositions, this, X - i, Y) : false;
-                Y_Pos = Y_Pos ? board.BasicMoveValidate(PossiblePositions, this, X, Y + i) : false;
+                xPos = xPos ? board.BasicMoveValidate(possiblePositions, this, curRow + i, curCol) : false;
+                yNeg = yNeg ? board.BasicMoveValidate(possiblePositions, this, curRow, curCol - i) : false;
+                xNeg = xNeg ? board.BasicMoveValidate(possiblePositions, this, curRow - i, curCol) : false;
+                yPos = yPos ? board.BasicMoveValidate(possiblePositions, this, curRow, curCol + i) : false;
 
-                if (!X_Pos && !X_Neg && !Y_Pos && !Y_Neg)
+                if (!xPos && !xNeg && !yPos && !yNeg)
                     break;
             }
 
-            return PossiblePositions;
+            return possiblePositions;
         }
 
         public override void SetPosition(int row, int column)
         {
-            FirstMove = false;
+            IsFirstMove = false;
             base.SetPosition(row, column);
         }
 
         public override void SetPosition(Position position)
         {
-            FirstMove = false;
+            IsFirstMove = false;
             base.SetPosition(position);
         }
         public override string ToString() => "R";
-        private bool FirstMove = true;
     }
 }
