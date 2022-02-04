@@ -106,8 +106,8 @@ namespace Chess
             // If there is a figure in the field of the shadowmove, put it in the buffer
             if (Figures[position.Row, position.Column] != null)
                 FigureShadowBuffer = Figures[position.Row, position.Column];
-            else
-                Figures[position.Row, position.Column] = figure;
+
+            Figures[position.Row, position.Column] = figure;
         }
         public void ResetShadowMove(Figure figure, Position position) 
         {
