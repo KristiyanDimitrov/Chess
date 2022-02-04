@@ -22,7 +22,7 @@ namespace Chess
                 Position From = Print.GetPositionFrom_User(CurrentGame);
 
                 //Get possible moves
-                PossibleMoves = CurrentGame.getPossibleMoves(From);
+                PossibleMoves = CurrentGame.GetPossibleMoves(From);
                 if (!PossibleMoves.Any())
                     continue;              
 

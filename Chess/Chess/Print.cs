@@ -111,7 +111,7 @@ namespace Chess
 
                 if (!chessboard.ExistFigure(position))
                 {
-                    Console.WriteLine("No figure in this possition. Please enter again.");
+                    Console.WriteLine("No figure in this position. Please enter again.");
                     continue;
                 }
                 else if (chessboard.GetFigureFromPosition(position).Color != game.CurrentPlayer.Color)

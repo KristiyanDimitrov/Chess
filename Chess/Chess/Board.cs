@@ -93,7 +93,7 @@ namespace Chess
 
         public void MoveFigure(Figure figure) // For intialising the board
         {
-            Position Position = figure.GettPosition();
+            Position Position = figure.GetPosition();
 
             Figures[Position.Row, Position.Column] = figure;
         }
@@ -106,8 +106,8 @@ namespace Chess
             // If there is a figure in the field of the shadowmove, put it in the buffer
             if (Figures[position.Row, position.Column] != null)
                 FigureShadowBuffer = Figures[position.Row, position.Column];
-            else
-                Figures[position.Row, position.Column] = figure;
+
+            Figures[position.Row, position.Column] = figure;
         }
         public void ResetShadowMove(Figure figure, Position position) 
         {
@@ -137,7 +137,7 @@ namespace Chess
 
         private void ClearFigure(Figure figure, bool isMoved = false)
         {
-            Position Position = figure.GettPosition();
+            Position Position = figure.GetPosition();
             Figures[Position.Row, Position.Column] = null;
             if (!isMoved)
                 TakenFigures.Add(figure);          
