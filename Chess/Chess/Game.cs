@@ -22,7 +22,7 @@ namespace Chess
             Turn = 1;
             GameEnded = false;
             SetBoard();
-            CurrentPlayer = Players.Where(x => x.Color == Figure.ColorList.White).FirstOrDefault();
+            CurrentPlayer = Players.FirstOrDefault(x => x.Color == Figure.ColorList.White);
         }
 
         public void SetBoard()
@@ -68,36 +68,36 @@ namespace Chess
 
         public void PlayMove(Position from, Position to)
         {
-            Figure SelectedFigure = Chessboard.ClearPosition(from);
+            Figure selectedFigure = Chessboard.ClearPosition(from);
             
 
             //Castling move - Handling the Rook
-            if (SelectedFigure is King)
-                if (Math.Abs(SelectedFigure.FigurePosition.Column - to.Column) == 2)
+            if (selectedFigure is King)
+                if (Math.Abs(selectedFigure.FigurePosition.Column - to.Column) == 2)
                 {
-                    Tuple<Rook, Position> RookMove = ((King) SelectedFigure).GetCastleMoveRook(to);
-                    Chessboard.MoveFigure(RookMove.Item1, RookMove.Item2);
+                    Tuple<Rook, Position> rookMove = ((King) selectedFigure).GetCastleMoveRook(to);
+                    Chessboard.MoveFigure(rookMove.Item1, rookMove.Item2);
                 }
 
-            Chessboard.MoveFigure(SelectedFigure, to);
+            Chessboard.MoveFigure(selectedFigure, to);
 
 
-            CurrentPlayer = CurrentPlayer.Color == Figure.ColorList.White ? Players.Where(x => x.Color == Figure.ColorList.Black).FirstOrDefault() : Players.Where(x => x.Color == Figure.ColorList.White).FirstOrDefault();
-            SelectedFigure.IsFirstMove = false;
+            CurrentPlayer = CurrentPlayer.Color == Figure.ColorList.White ? Players.FirstOrDefault(x => x.Color == Figure.ColorList.Black) : Players.FirstOrDefault(x => x.Color == Figure.ColorList.White);
+            selectedFigure.IsFirstMove = false;
 
             KingInCheckUpdate(CurrentPlayer);
         }
 
         public List<Position> GetPossibleMoves(Position from)
         {
-            Figure SelectedFigure = Chessboard.GetFigureFromPosition(from);
-            List<Position> PossibleMoves = SelectedFigure.PossibleMoves(Chessboard);
+            Figure selectedFigure = Chessboard.GetFigureFromPosition(from);
+            List<Position> possibleMoves = selectedFigure.PossibleMoves(Chessboard);
             
             // Position CastleMove = PossibleMoves.FirstOrDefault(x => Math.Abs(x.Column - SelectedFigure.GettPosition().Column) == 2);
 
-            KingCheck(SelectedFigure.Color, SelectedFigure, PossibleMoves);//Remove moves that will put friendly King in Check
+            KingCheck(selectedFigure.Color, selectedFigure, possibleMoves);//Remove moves that will put friendly King in Check
 
-            return PossibleMoves;
+            return possibleMoves;
         }
 
         /*
@@ -109,27 +109,27 @@ namespace Chess
         */
         private void KingCheck(Figure.ColorList color, Figure selectedFigure, List<Position> moves)
         {
-            Position TheKingPos = Chessboard.GetKingFigure(color).GetPosition(); // When the figure to move is the King this breaks the logic ¬¬¬¬¬¬¬
-            List<Position> MovesToRemove = new List<Position>();
+            Position theKingPos = Chessboard.GetKingFigure(color).GetPosition(); // When the figure to move is the King this breaks the logic ¬¬¬¬¬¬¬
+            List<Position> movesToRemove = new List<Position>();
      
 
             foreach (Position pos in moves)
             {
-                TheKingPos = selectedFigure is King ? pos : TheKingPos;
+                theKingPos = selectedFigure is King ? pos : theKingPos;
                 Chessboard.MoveShadowFigure(selectedFigure, pos);
 
                 for (int x = Chessboard.Rows - 1; x >= 0; x--)
                 {
                     for (int y = 0; y <= Chessboard.Columns - 1; y++)
                     {
-                        Figure CurFigure = Chessboard.GetFigureFromPosition(x, y);
-                        if (CurFigure == null || CurFigure?.Color == color)
+                        Figure curFigure = Chessboard.GetFigureFromPosition(x, y);
+                        if (curFigure == null || curFigure?.Color == color)
                             continue;
 
                         // If the potential move puts the friendly King in danger remove it from the list of possible moves
-                        List<Position> CurFigurePossibleMoves = CurFigure.PossibleMoves(Chessboard);
-                        if (CurFigurePossibleMoves.Exists(move => move.Column == TheKingPos.Column && move.Row == TheKingPos.Row))
-                            MovesToRemove.Add(pos);
+                        List<Position> curFigurePossibleMoves = curFigure.PossibleMoves(Chessboard);
+                        if (curFigurePossibleMoves.Exists(move => move.Column == theKingPos.Column && move.Row == theKingPos.Row))
+                            movesToRemove.Add(pos);
                     }
                 }
                 // Castle Move Jump: Check if the previous field was not under attack
@@ -138,42 +138,42 @@ namespace Chess
                     Tuple<Rook, Position> castleRookMove = ((King)Chessboard.GetKingFigure(color)).GetCastleMoveRook(pos);
 
                     if (!moves.Exists(x => x.Row == (castleRookMove.Item2.Row) && x.Column == (castleRookMove.Item2.Column)) // Check if the field that is jumped is a valid move
-                            || MovesToRemove.Exists(s => s.Row == (castleRookMove.Item2.Row) && s.Column == (castleRookMove.Item2.Column)))  // or if it is going to be removed.
-                        MovesToRemove.Add(pos);
+                            || movesToRemove.Exists(s => s.Row == (castleRookMove.Item2.Row) && s.Column == (castleRookMove.Item2.Column)))  // or if it is going to be removed.
+                        movesToRemove.Add(pos);
                 }
                 
 
                 Chessboard.ResetShadowMove(selectedFigure, pos);
             }
 
-            foreach (Position move in MovesToRemove)
+            foreach (Position move in movesToRemove)
                 moves.RemoveAll(x => x.Column == move.Column && x.Row == move.Row);
         }
 
         // Check if the played move puts the opponents King in Check
-        private void KingInCheckUpdate(Player CurentPlayer)
+        private void KingInCheckUpdate(Player curentPlayer)
         {
-            King TheKing = (King)Chessboard.GetKingFigure(CurrentPlayer.Color == Figure.ColorList.Black ? Figure.ColorList.White : Figure.ColorList.Black);
+            King theKing = (King)Chessboard.GetKingFigure(CurrentPlayer.Color == Figure.ColorList.Black ? Figure.ColorList.White : Figure.ColorList.Black);
 
             for (int x = Chessboard.Rows - 1; x >= 0; x--)
             {
                 for (int y = 0; y <= Chessboard.Columns - 1; y++)
                 {
-                    Figure CurFigure = Chessboard.GetFigureFromPosition(x, y);
-                    if (CurFigure == null || CurFigure?.Color == TheKing.Color)
+                    Figure curFigure = Chessboard.GetFigureFromPosition(x, y);
+                    if (curFigure == null || curFigure?.Color == theKing.Color)
                         continue;
 
-                    List<Position> CurFigurePossibleMoves = CurFigure.PossibleMoves(Chessboard);
-                    if (CurFigurePossibleMoves.Exists(move => move.Column == TheKing.FigurePosition.Column && move.Row == TheKing.FigurePosition.Row))
+                    List<Position> curFigurePossibleMoves = curFigure.PossibleMoves(Chessboard);
+                    if (curFigurePossibleMoves.Exists(move => move.Column == theKing.FigurePosition.Column && move.Row == theKing.FigurePosition.Row))
                     {
-                        TheKing.KingInCheck = true; // Don't like the check being in two places, will be like this for now until I figure out how to implement it best ¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬
-                        CurentPlayer.InCheck = true;
+                        theKing.KingInCheck = true; // Don't like the check being in two places, will be like this for now until I figure out how to implement it best ¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬
+                        curentPlayer.InCheck = true;
                         return;
                     }
                 }
             }
-            TheKing.KingInCheck = false;
-            CurentPlayer.InCheck = false;
+            theKing.KingInCheck = false;
+            curentPlayer.InCheck = false;
         }
     }
 }

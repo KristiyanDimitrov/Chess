@@ -16,15 +16,15 @@ namespace Chess.Figures
         public override List<Position> PossibleMoves(Board board)
         {
             _castleMoveRook = new();
-            List<Position> PossiblePositions = new List<Position>();
-            Position CurPos = base.FigurePosition;
-            int X = CurPos.Row;
-            int Y = CurPos.Column;
+            List<Position> possiblePositions = new List<Position>();
+            Position curPos = base.FigurePosition;
+            int X = curPos.Row;
+            int Y = curPos.Column;
 
             // Normal moves
             for (int x = -1; x <= 1; x++)
                 for (int y = -1; y <= 1; y++)
-                    board.BasicMoveValidate(PossiblePositions, this, X + x, Y + y);
+                    board.BasicMoveValidate(possiblePositions, this, X + x, Y + y);
 
             
             // Castle move. The validation for fields under attack is done outside of this class in Game.GetPossibleMoves().
@@ -36,7 +36,7 @@ namespace Chess.Figures
                     if (figure is null)
                         continue;
                     if (figure != null && figure is Rook && ((Rook)figure).IsFirstMove)
-                        if (board.BasicMoveValidate(PossiblePositions, this, X, Y - 2))
+                        if (board.BasicMoveValidate(possiblePositions, this, X, Y - 2))
                             _castleMoveRook.Add(new Position(X, Y - 2), figure as Rook); // The castle move of the king, the Rook figure or possition
                 }
 
@@ -46,12 +46,12 @@ namespace Chess.Figures
                     if (figure is null)
                         continue;
                     if (figure != null && figure is Rook && ((Rook)figure).IsFirstMove)
-                        if (board.BasicMoveValidate(PossiblePositions, this, X, Y + 2))
+                        if (board.BasicMoveValidate(possiblePositions, this, X, Y + 2))
                             _castleMoveRook.Add(new Position(X, Y + 2), figure as Rook);
                 }
             }
 
-            return PossiblePositions;
+            return possiblePositions;
         }
         public override void SetPosition(int row, int column)
         {

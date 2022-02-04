@@ -11,17 +11,17 @@ namespace Chess.Figures
 
         public override List<Position> PossibleMoves(Board board)
         {
-            List<Position> PossiblePositions = new List<Position>();
-            Position CurPos = base.FigurePosition;
-            int X = CurPos.Row;
-            int Y = CurPos.Column;
+            List<Position> possiblePositions = new List<Position>();
+            Position curPos = base.FigurePosition;
+            int x = curPos.Row;
+            int y = curPos.Column;
 
             for(int x = -2; x <= 2; x++)
                 for (int y = -2; y <= 2; y++)
                     if(Math.Abs(x) != Math.Abs(y) & x != 0 & y != 0)
-                        board.BasicMoveValidate(PossiblePositions, this, X + x, Y + y);
+                        board.BasicMoveValidate(possiblePositions, this, X + x, Y + y);
 
-            return PossiblePositions;
+            return possiblePositions;
         }
 
         public override string ToString() => "N";

@@ -13,7 +13,7 @@ namespace Chess
         public int Columns { get; set; }
         private Figure [,] Figures { get; set; }
         public List<Figure> TakenFigures{ get; private set; }
-        private Figure FigureShadowBuffer = null;
+        private Figure _figureShadowBuffer = null;
 
         public Board(int rows, int columns)
         {
@@ -93,9 +93,9 @@ namespace Chess
 
         public void MoveFigure(Figure figure) // For intialising the board
         {
-            Position Position = figure.GetPosition();
+            Position position = figure.GetPosition();
 
-            Figures[Position.Row, Position.Column] = figure;
+            Figures[position.Row, position.Column] = figure;
         }
 
         // Used to validate moves
@@ -105,7 +105,7 @@ namespace Chess
 
             // If there is a figure in the field of the shadowmove, put it in the buffer
             if (Figures[position.Row, position.Column] != null)
-                FigureShadowBuffer = Figures[position.Row, position.Column];
+                _figureShadowBuffer = Figures[position.Row, position.Column];
 
             Figures[position.Row, position.Column] = figure;
         }
@@ -113,10 +113,10 @@ namespace Chess
         {
             Figures[figure.FigurePosition.Row, figure.FigurePosition.Column] = figure;
 
-            if (FigureShadowBuffer != null)
+            if (_figureShadowBuffer != null)
             {
-                Figures[FigureShadowBuffer.FigurePosition.Row, FigureShadowBuffer.FigurePosition.Column] = FigureShadowBuffer;
-                FigureShadowBuffer = null;
+                Figures[_figureShadowBuffer.FigurePosition.Row, _figureShadowBuffer.FigurePosition.Column] = _figureShadowBuffer;
+                _figureShadowBuffer = null;
             } 
             else
                 Figures[position.Row, position.Column] = null;
@@ -137,8 +137,8 @@ namespace Chess
 
         private void ClearFigure(Figure figure, bool isMoved = false)
         {
-            Position Position = figure.GetPosition();
-            Figures[Position.Row, Position.Column] = null;
+            Position position = figure.GetPosition();
+            Figures[position.Row, position.Column] = null;
             if (!isMoved)
                 TakenFigures.Add(figure);          
         }
@@ -157,7 +157,7 @@ namespace Chess
 
         public static int GetLetterMap(char letter)
         {
-            var CharPosition = new Dictionary<char, int>(){
+            var charPosition = new Dictionary<char, int>(){
             {'A', 0},
             {'B', 1},
             {'C', 2},
@@ -167,8 +167,8 @@ namespace Chess
             {'G', 6},
             {'H', 7}};
 
-            if (CharPosition.ContainsKey(Char.ToUpper(letter)))
-                return CharPosition[Char.ToUpper(letter)];
+            if (charPosition.ContainsKey(Char.ToUpper(letter)))
+                return charPosition[Char.ToUpper(letter)];
             else
                 return -1;
         }

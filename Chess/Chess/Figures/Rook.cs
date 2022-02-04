@@ -11,41 +11,41 @@ namespace Chess.Figures
 
         public override List<Position> PossibleMoves(Board board)
         {
-            List<Position> PossiblePositions = new List<Position>();
-            Position CurPos = base.FigurePosition;
+            List<Position> possiblePositions = new List<Position>();
+            Position curPos = base.FigurePosition;
 
-            int X = CurPos.Row;
-            int Y = CurPos.Column;
+            int X = curPos.Row;
+            int Y = curPos.Column;
 
             bool X_Pos, X_Neg, Y_Pos, Y_Neg; // Indicator if the movement to a given direction is blocked
             X_Pos = X_Neg = Y_Pos = Y_Neg = true;
 
             for (int i = 1; true; i++)
             {
-                X_Pos = X_Pos ? board.BasicMoveValidate(PossiblePositions, this, X + i, Y) : false;
-                Y_Neg = Y_Neg ? board.BasicMoveValidate(PossiblePositions, this, X, Y - i) : false;
-                X_Neg = X_Neg ? board.BasicMoveValidate(PossiblePositions, this, X - i, Y) : false;
-                Y_Pos = Y_Pos ? board.BasicMoveValidate(PossiblePositions, this, X, Y + i) : false;
+                X_Pos = X_Pos ? board.BasicMoveValidate(possiblePositions, this, X + i, Y) : false;
+                Y_Neg = Y_Neg ? board.BasicMoveValidate(possiblePositions, this, X, Y - i) : false;
+                X_Neg = X_Neg ? board.BasicMoveValidate(possiblePositions, this, X - i, Y) : false;
+                Y_Pos = Y_Pos ? board.BasicMoveValidate(possiblePositions, this, X, Y + i) : false;
 
                 if (!X_Pos && !X_Neg && !Y_Pos && !Y_Neg)
                     break;
             }
 
-            return PossiblePositions;
+            return possiblePositions;
         }
 
         public override void SetPosition(int row, int column)
         {
-            FirstMove = false;
+            _firstMove = false;
             base.SetPosition(row, column);
         }
 
         public override void SetPosition(Position position)
         {
-            FirstMove = false;
+            _firstMove = false;
             base.SetPosition(position);
         }
         public override string ToString() => "R";
-        private bool FirstMove = true;
+        private bool _firstMove = true;
     }
 }

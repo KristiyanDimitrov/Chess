@@ -16,8 +16,8 @@ namespace Chess
             Console.WriteLine("\n   A B C D E F G H\n");
             Console.ResetColor();
 
-            Figure Figure;
-            bool MoveIsPossible = false;
+            Figure figure;
+            bool moveIsPossible = false;
 
             for (int x = chessBoard.Rows-1; x >= 0 ; x--)
             {
@@ -27,11 +27,11 @@ namespace Chess
 
                 for (int y = 0; y <= chessBoard.Columns - 1; y++)
                 {                 
-                    Figure = chessBoard.GetFigureFromPosition(x, y);
+                    figure = chessBoard.GetFigureFromPosition(x, y);
                     int test = possibleMoves.Where(el => el.Row == x && el.Column == y).Count();
-                    MoveIsPossible = possibleMoves.Where(el => el.Row == x && el.Column == y).Count() == 1;
+                    moveIsPossible = possibleMoves.Where(el => el.Row == x && el.Column == y).Count() == 1;
 
-                    PrintPiece(Figure, MoveIsPossible);
+                    PrintPiece(figure, moveIsPossible);
                 }
                 Console.WriteLine();
 
@@ -96,16 +96,16 @@ namespace Chess
             while (true)
             {
                 Console.Write("From:");
-                var PositionFrom = Console.ReadLine();
+                var positionFrom = Console.ReadLine();
 
-                if (PositionFrom.Count() !=2)
+                if (positionFrom.Count() !=2)
                 {
                     Console.WriteLine("Not a valid position. Please enter again.");
                     continue;
                 }
 
-                x = Char.IsDigit(PositionFrom[0]) ? (int)Char.GetNumericValue(PositionFrom[0]) -1 : -1;
-                y = Board.GetLetterMap(PositionFrom[1]);
+                x = Char.IsDigit(positionFrom[0]) ? (int)Char.GetNumericValue(positionFrom[0]) -1 : -1;
+                y = Board.GetLetterMap(positionFrom[1]);
 
                 position = new Position(x, y);
 
@@ -135,12 +135,12 @@ namespace Chess
             while(true)
             {
                 Console.Write("To:");
-                var PositionFrom = Console.ReadLine();
-                if (PositionFrom.ToUpper() == "X")
+                var positionFrom = Console.ReadLine();
+                if (positionFrom.ToUpper() == "X")
                     return null;
 
-                x = Char.IsDigit(PositionFrom[0]) ? (int)Char.GetNumericValue(PositionFrom[0]) -1 : -1;
-                y = Board.GetLetterMap(PositionFrom[1]);
+                x = Char.IsDigit(positionFrom[0]) ? (int)Char.GetNumericValue(positionFrom[0]) -1 : -1;
+                y = Board.GetLetterMap(positionFrom[1]);
 
                 position = new Position(x, y);
 
