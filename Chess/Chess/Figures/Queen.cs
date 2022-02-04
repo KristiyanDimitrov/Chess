@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using Chess.Figures.Properties;
 
 namespace Chess.Figures
@@ -11,7 +9,7 @@ namespace Chess.Figures
 
         public override List<Position> PossibleMoves(Board board)
         {
-            List<Position> possiblePositions = new List<Position>();
+            List<Position> possiblePositions = new();
             Position curPos = base.FigurePosition;
             int x = curPos.Row;
             int y = curPos.Column;
@@ -20,7 +18,7 @@ namespace Chess.Figures
             xPos = xNeg = yPos = yNeg = true;
 
             // Straing movements
-            for (int i = 1; true; i++)
+            for (int i = 1;; i++)
             {
                 xPos = xPos ? board.BasicMoveValidate(possiblePositions, this, x + i, y) : false;
                 yNeg = yNeg ? board.BasicMoveValidate(possiblePositions, this, x, y - i) : false;
@@ -33,7 +31,7 @@ namespace Chess.Figures
 
             xPos = xNeg = yPos = yNeg = true;
             // Diagonal movement
-            for (int i = 1; true; i++)
+            for (int i = 1;; i++)
             {
                 xPos = xPos ? board.BasicMoveValidate(possiblePositions, this, x + i, y + i) : false;
                 yNeg = yNeg ? board.BasicMoveValidate(possiblePositions, this, x + i, y - i) : false;

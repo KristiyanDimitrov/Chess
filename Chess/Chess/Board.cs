@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using Chess.Figures;
 using Chess.Figures.Properties;
 
 namespace Chess
@@ -13,7 +11,7 @@ namespace Chess
         public int Columns { get; set; }
         private Figure [,] Figures { get; set; }
         public List<Figure> TakenFigures{ get; private set; }
-        private Figure _figureShadowBuffer = null;
+        private Figure _figureShadowBuffer;
 
         public Board(int rows, int columns)
         {
@@ -69,7 +67,7 @@ namespace Chess
         }
         public bool ExistFigure(int x, int y)
         {
-            Position position = new Position(x, y);
+            Position position = new(x, y);
             if (ValidatePosition(position))
                 return GetFigureFromPosition(position) != null;
             else
@@ -122,18 +120,6 @@ namespace Chess
                 Figures[position.Row, position.Column] = null;
         }
         
-
-
-        private void SetPosition(Figure figure, Position position)
-        {
-            figure.SetPosition(position.Row, position.Column);
-            Figures[position.Row, position.Column] = figure;
-        }
-        private void SetPosition(Figure figure, int x, int y)
-        {
-            figure.SetPosition(x, y);
-            Figures[x, y] = figure;
-        }
 
         private void ClearFigure(Figure figure, bool isMoved = false)
         {

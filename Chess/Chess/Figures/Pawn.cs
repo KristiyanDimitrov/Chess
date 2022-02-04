@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Chess.Figures.Properties;
 
 namespace Chess.Figures
@@ -12,7 +10,7 @@ namespace Chess.Figures
 
         public override List<Position> PossibleMoves(Board board)
         {
-            List<Position> possiblePositions = new List<Position>();
+            List<Position> possiblePositions = new();
             Position curPos= base.FigurePosition;
 
             if (base.Color == ColorList.Black)

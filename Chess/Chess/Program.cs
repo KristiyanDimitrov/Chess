@@ -1,17 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Chess.Figures;
 using Chess.Figures.Properties;
 
 namespace Chess
 {
     class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
-            Game currentGame = new Game();
-            List<Position> possibleMoves = new List<Position>();
+            Game currentGame = new();
+            List<Position> possibleMoves;
 
             while (!currentGame.GameEnded)
             {
