@@ -14,7 +14,6 @@ namespace Chess
         public Player[] Players = new Player[2];
         public bool GameEnded { get; private set; }
 
-
         public Game()
         {
             Chessboard = new Board(8, 8);
@@ -42,7 +41,7 @@ namespace Chess
             Chessboard.MoveFigure(new Pawn(6, 4, Figure.ColorList.White));
             Chessboard.MoveFigure(new Pawn(6, 5, Figure.ColorList.White));
             Chessboard.MoveFigure(new Pawn(6, 6, Figure.ColorList.White));
-            Chessboard.MoveFigure(new Pawn(6, 7, Figure.ColorList.White));
+            Chessboard.MoveFigure(new Pawn(4, 7, Figure.ColorList.Black));
 
             Chessboard.MoveFigure(new Rook(0, 0, Figure.ColorList.Black));
             Chessboard.MoveFigure(new Knight(0, 1, Figure.ColorList.Black));
@@ -68,8 +67,8 @@ namespace Chess
         public void PlayMove(Position from, Position to)
         {
             Figure selectedFigure = Chessboard.ClearPosition(from);
-            
 
+            #region SpecialMoves
             //Castling move - Handling the Rook
             if (selectedFigure is King)
                 if (Math.Abs(selectedFigure.FigurePosition.Column - to.Column) == 2)
@@ -78,7 +77,32 @@ namespace Chess
                     Chessboard.MoveFigure(rookMove.Item1, rookMove.Item2);
                 }
 
+            // Pawn Special Move - Promotion
+            if (selectedFigure is Pawn && (to.Row == 0 || to.Row == Chessboard.Rows - 1))
+            {
+                var transformedFigure = Print.GetPawnPromotion(to.Row, to.Column, selectedFigure.Color);
+                selectedFigure = transformedFigure;
+            }
+
+            // Pawn Special Move - En passant
+            if (Chessboard.EnPassantEnabledPawn != null && selectedFigure is Pawn && Chessboard.IsEnPassantPossition(to.Row, to.Column))
+                Chessboard.ClearFigure(Chessboard.EnPassantEnabledPawn, true);
+            #endregion
+
             Chessboard.MoveFigure(selectedFigure, to);
+
+            #region EnPassantSetUp
+            if (selectedFigure is Pawn && ((Pawn)selectedFigure).EnPassant)
+            {
+                Chessboard.EnPassantEnabledPawn = selectedFigure;
+                Chessboard.EnPassantPosition = new Position(selectedFigure.FigurePosition.Row - 1, selectedFigure.FigurePosition.Column);
+            }
+            else
+            {
+                Chessboard.EnPassantEnabledPawn = null;
+                Chessboard.EnPassantPosition = null;
+            }
+            #endregion
 
             CurrentPlayer = CurrentPlayer.Color == Figure.ColorList.White ? Players.FirstOrDefault(x => x.Color == Figure.ColorList.Black) : Players.FirstOrDefault(x => x.Color == Figure.ColorList.White);
 

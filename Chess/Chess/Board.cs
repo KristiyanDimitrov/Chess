@@ -13,6 +13,9 @@ namespace Chess
         public List<Figure> TakenFigures{ get; private set; }
         private Figure _figureShadowBuffer;
 
+        public Figure EnPassantEnabledPawn;
+        public Position EnPassantPosition;
+
         public Board(int rows, int columns)
         {
             Rows = rows;
@@ -83,7 +86,11 @@ namespace Chess
 
         public void MoveFigure(Figure figure, Position position)
         {
-            ClearFigure(figure, true);
+            ClearFigure(figure);
+
+            Figure figureFromPossition = GetFigureFromPosition(position);
+            if (figureFromPossition != null)
+                ClearFigure(figureFromPossition,true);
             
             figure.SetPosition(position);
             Figures[position.Row, position.Column] = figure;
@@ -99,9 +106,9 @@ namespace Chess
         // Used to validate moves
         public void MoveShadowFigure(Figure figure, Position position)
         {
-            ClearFigure(figure, true);
+            ClearFigure(figure);
 
-            // If there is a figure in the field of the shadowmove, put it in the buffer
+            // If there is a figure in the field of the shadow move, put it in the buffer
             if (Figures[position.Row, position.Column] != null)
                 _figureShadowBuffer = Figures[position.Row, position.Column];
 
@@ -119,13 +126,18 @@ namespace Chess
             else
                 Figures[position.Row, position.Column] = null;
         }
-        
 
-        private void ClearFigure(Figure figure, bool isMoved = false)
+        public bool IsEnPassantPossition(int row, int col)
+        {
+            if (row == EnPassantPosition?.Row && col == EnPassantPosition?.Column)
+                return true;
+            return false;
+        }
+        public void ClearFigure(Figure figure, bool isRemoved = false)
         {
             Position position = figure.GetPosition();
             Figures[position.Row, position.Column] = null;
-            if (!isMoved)
+            if (isRemoved)
                 TakenFigures.Add(figure);          
         }
 

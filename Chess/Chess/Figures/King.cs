@@ -5,6 +5,7 @@ using Chess.Figures.Properties;
 
 namespace Chess.Figures
 {
+    [FigureInfo("King","K")]
     class King : Figure
     {
         public King(int row, int column, ColorList color) : base(row, column, color) { }

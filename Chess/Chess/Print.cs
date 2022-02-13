@@ -174,5 +174,29 @@ namespace Chess
 
             Console.WriteLine("\n\n");
         }
+
+        public static Figure GetPawnPromotion(params object[] constructorArgs)
+        {
+            while (true)
+            {
+                Console.Write("Transform Pawn to:");
+                string figureType = Console.ReadLine() ?? "";
+
+                if (figureType.ToUpper() == "K")
+                {
+                    Console.WriteLine("Can not transform into King.");
+                    continue;   
+                }
+
+                // Use reflection to construct a base class Figure based on derived class Attributes
+                IEnumerable <Figure> exporters = typeof(Figure)
+                    .Assembly.GetTypes()
+                    .Where(t => t.IsSubclassOf(typeof(Figure)) && !t.IsAbstract && t.GetCustomAttributesData()[0].ConstructorArguments[1].Value.ToString().Contains(figureType.ToUpper()))
+                    .Select(t => (Figure)Activator.CreateInstance(t, constructorArgs));
+
+                if (exporters.FirstOrDefault() != null)
+                    return exporters.FirstOrDefault();
+            }
+        }
     } 
 }

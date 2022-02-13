@@ -17,10 +17,10 @@ namespace Chess
                 Print.PrintBoard(currentGame.Chessboard);
 
                 //Validates position is valid and it contains a figure that corresponds to the current player color
-                Position @from = Print.GetPositionFrom_User(currentGame);
+                Position from = Print.GetPositionFrom_User(currentGame);
 
                 //Get possible moves
-                List<Position> possibleMoves = currentGame.GetPossibleMoves(@from);
+                List<Position> possibleMoves = currentGame.GetPossibleMoves(from);
                 if (!possibleMoves.Any())
                     continue;              
 
@@ -34,7 +34,7 @@ namespace Chess
                 if (to == null)
                     continue;
 
-                currentGame.PlayMove(@from, to);
+                currentGame.PlayMove(from, to);
             }
         }
     }
