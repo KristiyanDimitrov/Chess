@@ -4,6 +4,7 @@ using Chess.Figures.Properties;
 
 namespace Chess.Figures
 {
+    [FigureInfo("Pawn", "P")]
     public class Pawn : Figure
     {
         public Pawn(int row, int column, ColorList color) : base(row, column, color) { }

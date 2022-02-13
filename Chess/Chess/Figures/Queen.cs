@@ -3,6 +3,7 @@ using Chess.Figures.Properties;
 
 namespace Chess.Figures
 {
+    [FigureInfo("Queen", "Q")]
     class Queen : Figure
     {
         public Queen(int row, int column, ColorList color) : base(row, column, color) { }

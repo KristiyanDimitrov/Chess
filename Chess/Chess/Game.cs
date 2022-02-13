@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using Chess.Figures;
 using Chess.Figures.Properties;
 using System.Linq;
@@ -34,7 +35,7 @@ namespace Chess
             Chessboard.MoveFigure(new King(7, 4, Figure.ColorList.White));
             Chessboard.MoveFigure(new Bishop(7, 5, Figure.ColorList.White));
             Chessboard.MoveFigure(new Knight(7, 6, Figure.ColorList.White));
-            Chessboard.MoveFigure(new Rook(7, 7, Figure.ColorList.White));
+            //Chessboard.MoveFigure(new Rook(7, 7, Figure.ColorList.White));
             Chessboard.MoveFigure(new Pawn(6, 0, Figure.ColorList.White));
             Chessboard.MoveFigure(new Pawn(6, 1, Figure.ColorList.White));
             Chessboard.MoveFigure(new Pawn(6, 2, Figure.ColorList.White));
@@ -42,7 +43,7 @@ namespace Chess
             Chessboard.MoveFigure(new Pawn(6, 4, Figure.ColorList.White));
             Chessboard.MoveFigure(new Pawn(6, 5, Figure.ColorList.White));
             Chessboard.MoveFigure(new Pawn(6, 6, Figure.ColorList.White));
-            Chessboard.MoveFigure(new Pawn(6, 7, Figure.ColorList.White));
+            Chessboard.MoveFigure(new Pawn(4, 7, Figure.ColorList.Black));
 
             Chessboard.MoveFigure(new Rook(0, 0, Figure.ColorList.Black));
             Chessboard.MoveFigure(new Knight(0, 1, Figure.ColorList.Black));
@@ -77,6 +78,14 @@ namespace Chess
                     Tuple<Rook, Position> rookMove = ((King) selectedFigure).GetCastleMoveRook(to);
                     Chessboard.MoveFigure(rookMove.Item1, rookMove.Item2);
                 }
+
+            // Pawn Special Move - Promotion
+            if (selectedFigure is Pawn && (to.Row == 0 || to.Row == Chessboard.Rows - 1))
+            {
+                var transformedFigure = Print.GetPawnPromotion(to.Row, to.Column, selectedFigure.Color);
+                selectedFigure = transformedFigure;
+
+            }
 
             Chessboard.MoveFigure(selectedFigure, to);
 
