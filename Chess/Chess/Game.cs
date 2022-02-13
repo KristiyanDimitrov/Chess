@@ -15,7 +15,6 @@ namespace Chess
         public Player[] Players = new Player[2];
         public bool GameEnded { get; private set; }
 
-
         public Game()
         {
             Chessboard = new Board(8, 8);
@@ -69,8 +68,8 @@ namespace Chess
         public void PlayMove(Position from, Position to)
         {
             Figure selectedFigure = Chessboard.ClearPosition(from);
-            
 
+            #region SpecialMoves
             //Castling move - Handling the Rook
             if (selectedFigure is King)
                 if (Math.Abs(selectedFigure.FigurePosition.Column - to.Column) == 2)
@@ -84,10 +83,27 @@ namespace Chess
             {
                 var transformedFigure = Print.GetPawnPromotion(to.Row, to.Column, selectedFigure.Color);
                 selectedFigure = transformedFigure;
-
             }
 
+            // Pawn Special Move - En passant
+            if (Chessboard.EnPassantEnabledPawn != null && selectedFigure is Pawn && Chessboard.IsEnPassantPossition(to.Row, to.Column))
+                Chessboard.ClearFigure(Chessboard.EnPassantEnabledPawn, true);
+            #endregion
+
             Chessboard.MoveFigure(selectedFigure, to);
+
+            #region EnPassantSetUp
+            if (selectedFigure is Pawn && ((Pawn)selectedFigure).EnPassant)
+            {
+                Chessboard.EnPassantEnabledPawn = selectedFigure;
+                Chessboard.EnPassantPosition = new Position(selectedFigure.FigurePosition.Row - 1, selectedFigure.FigurePosition.Column);
+            }
+            else
+            {
+                Chessboard.EnPassantEnabledPawn = null;
+                Chessboard.EnPassantPosition = null;
+            }
+            #endregion
 
             CurrentPlayer = CurrentPlayer.Color == Figure.ColorList.White ? Players.FirstOrDefault(x => x.Color == Figure.ColorList.Black) : Players.FirstOrDefault(x => x.Color == Figure.ColorList.White);
 
