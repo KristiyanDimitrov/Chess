@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using Chess.Figures;
 using Chess.Figures.Properties;
 using System.Linq;
@@ -34,7 +33,7 @@ namespace Chess
             Chessboard.MoveFigure(new King(7, 4, Figure.ColorList.White));
             Chessboard.MoveFigure(new Bishop(7, 5, Figure.ColorList.White));
             Chessboard.MoveFigure(new Knight(7, 6, Figure.ColorList.White));
-            //Chessboard.MoveFigure(new Rook(7, 7, Figure.ColorList.White));
+            Chessboard.MoveFigure(new Rook(7, 7, Figure.ColorList.White));
             Chessboard.MoveFigure(new Pawn(6, 0, Figure.ColorList.White));
             Chessboard.MoveFigure(new Pawn(6, 1, Figure.ColorList.White));
             Chessboard.MoveFigure(new Pawn(6, 2, Figure.ColorList.White));
