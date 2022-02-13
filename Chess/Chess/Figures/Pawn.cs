@@ -7,7 +7,7 @@ namespace Chess.Figures
     [FigureInfo("Pawn", "P")]
     public class Pawn : Figure
     {
-        public bool EnPassant { get; private set; } = false;
+        public bool EnPassant { get; private set; }
         public Pawn(int row, int column, ColorList color) : base(row, column, color) { }
 
         public override List<Position> PossibleMoves(Board board)
