@@ -83,7 +83,7 @@ namespace Chess
 
         public void MoveFigure(Figure figure, Position position)
         {
-            ClearFigure(figure, true);
+            ClearFigure(figure, false);
             
             figure.SetPosition(position);
             Figures[position.Row, position.Column] = figure;
