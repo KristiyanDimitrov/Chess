@@ -28,10 +28,10 @@ namespace Chess
 
             Chessboard.MoveFigure(new Rook(7, 0, Figure.ColorList.White));
             Chessboard.MoveFigure(new Knight(7, 1, Figure.ColorList.White));
-            Chessboard.MoveFigure(new Bishop(7, 2, Figure.ColorList.White));
+            Chessboard.MoveFigure(new Bishop(3, 0, Figure.ColorList.White)); //7-2
             Chessboard.MoveFigure(new Queen(6, 7, Figure.ColorList.White));
             Chessboard.MoveFigure(new King(7, 4, Figure.ColorList.White));
-            Chessboard.MoveFigure(new Bishop(7, 5, Figure.ColorList.White));
+            Chessboard.MoveFigure(new Bishop(3, 6, Figure.ColorList.White));
             Chessboard.MoveFigure(new Knight(7, 6, Figure.ColorList.White));
             Chessboard.MoveFigure(new Rook(7, 7, Figure.ColorList.White));
             //Chessboard.MoveFigure(new Pawn(6, 0, Figure.ColorList.White));
@@ -210,8 +210,8 @@ namespace Chess
             Player oposingPlayer = Players.FirstOrDefault(x => x.Color != theKing.Color); // KingCheck() is for 
 
             // Check for stalemate
-            //if (!kingPossibleMoves.Any() && Chessboard.IsOposingKingAlone(CurrentPlayer.Color))
-            //    return (true, "Current game is in Stalemate!");
+            if (!kingPossibleMoves.Any() && Chessboard.IsOposingKingAlone(CurrentPlayer.Color)) // ¬¬¬¬¬ OR The figures that he has have no possible moves
+                return (true, "Current game is in Stalemate!");
 
             // Check for King moves that can save it
             foreach (Position pos in kingPossibleMoves)
