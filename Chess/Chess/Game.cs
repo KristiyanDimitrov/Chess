@@ -12,13 +12,13 @@ namespace Chess
         public int Turn { get; private set; }
         public Player CurrentPlayer { get; private set; }
         public Player[] Players = new Player[2];
-        public bool GameEnded { get; private set; }
+        public (bool, string) GameEnded { get; private set; }
 
         public Game()
         {
             Chessboard = new Board(8, 8);
             Turn = 1;
-            GameEnded = false;
+            GameEnded = (false,"");
             SetBoard();
             CurrentPlayer = Players.FirstOrDefault(x => x.Color == Figure.ColorList.White);
         }
@@ -29,36 +29,36 @@ namespace Chess
             Chessboard.MoveFigure(new Rook(7, 0, Figure.ColorList.White));
             Chessboard.MoveFigure(new Knight(7, 1, Figure.ColorList.White));
             Chessboard.MoveFigure(new Bishop(7, 2, Figure.ColorList.White));
-            Chessboard.MoveFigure(new Queen(7, 3, Figure.ColorList.White));
+            Chessboard.MoveFigure(new Queen(6, 7, Figure.ColorList.White));
             Chessboard.MoveFigure(new King(7, 4, Figure.ColorList.White));
             Chessboard.MoveFigure(new Bishop(7, 5, Figure.ColorList.White));
             Chessboard.MoveFigure(new Knight(7, 6, Figure.ColorList.White));
             Chessboard.MoveFigure(new Rook(7, 7, Figure.ColorList.White));
-            Chessboard.MoveFigure(new Pawn(6, 0, Figure.ColorList.White));
-            Chessboard.MoveFigure(new Pawn(6, 1, Figure.ColorList.White));
-            Chessboard.MoveFigure(new Pawn(6, 2, Figure.ColorList.White));
-            Chessboard.MoveFigure(new Pawn(6, 3, Figure.ColorList.White));
-            Chessboard.MoveFigure(new Pawn(6, 4, Figure.ColorList.White));
-            Chessboard.MoveFigure(new Pawn(6, 5, Figure.ColorList.White));
-            Chessboard.MoveFigure(new Pawn(6, 6, Figure.ColorList.White));
-            Chessboard.MoveFigure(new Pawn(4, 7, Figure.ColorList.Black));
+            //Chessboard.MoveFigure(new Pawn(6, 0, Figure.ColorList.White));
+            //Chessboard.MoveFigure(new Pawn(6, 1, Figure.ColorList.White));
+            //Chessboard.MoveFigure(new Pawn(6, 2, Figure.ColorList.White));
+            //Chessboard.MoveFigure(new Pawn(6, 3, Figure.ColorList.White));
+            //Chessboard.MoveFigure(new Pawn(6, 4, Figure.ColorList.White));
+            //Chessboard.MoveFigure(new Pawn(6, 5, Figure.ColorList.White));
+            //Chessboard.MoveFigure(new Pawn(6, 6, Figure.ColorList.White));
+            //Chessboard.MoveFigure(new Pawn(4, 7, Figure.ColorList.White));
 
-            Chessboard.MoveFigure(new Rook(0, 0, Figure.ColorList.Black));
-            Chessboard.MoveFigure(new Knight(0, 1, Figure.ColorList.Black));
-            Chessboard.MoveFigure(new Bishop(0, 2, Figure.ColorList.Black));
-            Chessboard.MoveFigure(new Queen(0, 3, Figure.ColorList.Black));
+            //Chessboard.MoveFigure(new Rook(0, 0, Figure.ColorList.Black));
+            //Chessboard.MoveFigure(new Knight(0, 1, Figure.ColorList.Black));
+            //Chessboard.MoveFigure(new Bishop(0, 2, Figure.ColorList.Black));
+            Chessboard.MoveFigure(new Queen(1, 6, Figure.ColorList.Black));
             Chessboard.MoveFigure(new King(0, 4, Figure.ColorList.Black));
-            Chessboard.MoveFigure(new Bishop(0, 5, Figure.ColorList.Black));
-            Chessboard.MoveFigure(new Knight(0, 6, Figure.ColorList.Black));
-            Chessboard.MoveFigure(new Rook(0, 7, Figure.ColorList.Black));
-            Chessboard.MoveFigure(new Pawn(1, 0, Figure.ColorList.Black));
-            Chessboard.MoveFigure(new Pawn(1, 1, Figure.ColorList.Black));
-            Chessboard.MoveFigure(new Pawn(1, 2, Figure.ColorList.Black));
+            //Chessboard.MoveFigure(new Bishop(0, 5, Figure.ColorList.Black));
+            //Chessboard.MoveFigure(new Knight(0, 6, Figure.ColorList.Black));
+            //Chessboard.MoveFigure(new Rook(0, 7, Figure.ColorList.Black));
+            //Chessboard.MoveFigure(new Pawn(1, 0, Figure.ColorList.Black));
+            //Chessboard.MoveFigure(new Pawn(1, 1, Figure.ColorList.Black));
+            //Chessboard.MoveFigure(new Pawn(1, 2, Figure.ColorList.Black));
             Chessboard.MoveFigure(new Pawn(1, 3, Figure.ColorList.Black));
             Chessboard.MoveFigure(new Pawn(1, 4, Figure.ColorList.Black));
             Chessboard.MoveFigure(new Pawn(1, 5, Figure.ColorList.Black));
-            Chessboard.MoveFigure(new Pawn(1, 6, Figure.ColorList.Black));
-            Chessboard.MoveFigure(new Pawn(1, 7, Figure.ColorList.Black));
+            //Chessboard.MoveFigure(new Pawn(1, 6, Figure.ColorList.Black));
+            //Chessboard.MoveFigure(new Pawn(1, 7, Figure.ColorList.Black));
 
             Players[0] = new Player(Figure.ColorList.White);
             Players[1] = new Player(Figure.ColorList.Black);
@@ -107,6 +107,7 @@ namespace Chess
             CurrentPlayer = CurrentPlayer.Color == Figure.ColorList.White ? Players.FirstOrDefault(x => x.Color == Figure.ColorList.Black) : Players.FirstOrDefault(x => x.Color == Figure.ColorList.White);
 
             KingInCheckUpdate(CurrentPlayer);
+            GameEnded = EndgameUpdate(CurrentPlayer);
         }
 
         public List<Position> GetPossibleMoves(Position from)
@@ -170,9 +171,10 @@ namespace Chess
         }
 
         // Check if the played move puts the opponents King in Check
-        private void KingInCheckUpdate(Player currentPlayer)
+        private void KingInCheckUpdate(Player currentPlayer, Position KingShadowPosition = null)
         {
-            King theKing = (King)Chessboard.GetKingFigure(CurrentPlayer.Color == Figure.ColorList.Black ? Figure.ColorList.White : Figure.ColorList.Black);
+            King theKing = (King)Chessboard.GetKingFigure(currentPlayer.Color == Figure.ColorList.Black ? Figure.ColorList.White : Figure.ColorList.Black);
+            Position theKingPosition = KingShadowPosition ?? theKing.FigurePosition;
 
             for (int x = Chessboard.Rows - 1; x >= 0; x--)
             {
@@ -183,16 +185,76 @@ namespace Chess
                         continue;
 
                     List<Position> curFigurePossibleMoves = curFigure.PossibleMoves(Chessboard);
-                    if (curFigurePossibleMoves.Exists(move => move.Column == theKing.FigurePosition.Column && move.Row == theKing.FigurePosition.Row))
+                    if (curFigurePossibleMoves.Exists(move => move.Column == theKingPosition.Column && move.Row == theKingPosition.Row))
                     {
-                        theKing.KingInCheck = true; // Don't like the check being in two places, will be like this for now until I figure out how to implement it best ¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬
+                        theKing.KingInCheck = true;
                         currentPlayer.InCheck = true;
                         return;
                     }
                 }
             }
+
             theKing.KingInCheck = false;
             currentPlayer.InCheck = false;
+        }
+
+        private (bool, string) EndgameUpdate(Player currentPlayer)
+        {
+            if (currentPlayer.InCheck)
+                return (false, "");
+
+            King theKing = (King)Chessboard.GetKingFigure(CurrentPlayer.Color);
+            var kingPossibleMoves = theKing.PossibleMoves(Chessboard);
+            KingCheck(theKing.Color, theKing, kingPossibleMoves);
+
+            Player oposingPlayer = Players.FirstOrDefault(x => x.Color != theKing.Color); // KingCheck() is for 
+
+            // Check for stalemate
+            //if (!kingPossibleMoves.Any() && Chessboard.IsOposingKingAlone(CurrentPlayer.Color))
+            //    return (true, "Current game is in Stalemate!");
+
+            // Check for King moves that can save it
+            foreach (Position pos in kingPossibleMoves)
+            {
+                Chessboard.MoveShadowFigure(theKing, pos);
+
+                KingInCheckUpdate(oposingPlayer);
+                if (!theKing.KingInCheck)
+                {
+                    Chessboard.ResetShadowMove(theKing, pos);
+                    return (false, "");
+                }
+
+                Chessboard.ResetShadowMove(theKing, pos);
+            }
+
+            // Check for other moves that can save the king
+            for (int x = Chessboard.Rows - 1; x >= 0; x--)
+            {
+                for (int y = 0; y <= Chessboard.Columns - 1; y++)
+                {
+                    Figure curFigure = Chessboard.GetFigureFromPosition(x, y);
+                    if (curFigure == null || curFigure.Color != theKing.Color)
+                        continue;
+
+                    List<Position> curFigurePossibleMoves = curFigure.PossibleMoves(Chessboard);
+                    foreach (Position pos in curFigurePossibleMoves)
+                    {
+                        Chessboard.MoveShadowFigure(curFigure, pos);
+
+                        KingInCheckUpdate(oposingPlayer, curFigure is King ? pos : null);
+                        if (!theKing.KingInCheck)
+                        {
+                            Chessboard.ResetShadowMove(curFigure, pos);
+                            return (false, "");
+                        }                            
+
+                        Chessboard.ResetShadowMove(curFigure, pos);
+                    }
+                }
+            }
+            //KingInCheckUpdate(currentPlayer); ¬¬¬¬¬ why did i put this here? 
+            return (true, $"{CurrentPlayer.Color} player is in Checkmate!");
         }
     }
 }

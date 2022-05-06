@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Chess.Figures;
 using Chess.Figures.Properties;
 
 namespace Chess
@@ -170,5 +171,8 @@ namespace Chess
             else
                 return -1;
         }
+
+        public bool IsOposingKingAlone(Figure.ColorList curentKingColor) => Figures.Cast<Figure>().ToArray().Any(x => x is not King && x.Color != curentKingColor);
+
     }
 }
