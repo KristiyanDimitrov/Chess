@@ -124,12 +124,14 @@ namespace Chess
             This method uses "ShadowMoves" to check the consequences of a move. A ShadowMove consists of making the move in a controlled and reversible way,
         in order to use the existing methods of checking possible moves. 
             This helps to check if the state of the board after a move is valid. For example if it puts a friendly king in danger.
+            
+            <<ShadowMove>> !!FIGURE POSSITION DOES NOT CHANGE!!
         
             This method is also checks if friendly king is in danger during the Castle move.
         */
         private void KingCheck(Figure.ColorList color, Figure selectedFigure, List<Position> moves)
         {
-            Position theKingPos = Chessboard.GetKingFigure(color).GetPosition(); // When the figure to move is the King this breaks the logic ¬¬¬¬¬¬¬
+            Position theKingPos = Chessboard.GetKingFigure(color).GetPosition();
             List<Position> movesToRemove = new();
      
 
@@ -210,8 +212,8 @@ namespace Chess
             Player oposingPlayer = Players.FirstOrDefault(x => x.Color != theKing.Color); // KingCheck() is for 
 
             // Check for stalemate
-            if (!kingPossibleMoves.Any() && Chessboard.IsOposingKingAlone(CurrentPlayer.Color)) // ¬¬¬¬¬ OR The figures that he has have no possible moves
-                return (true, "Current game is in Stalemate!");
+            if (Chessboard.PlayerHasPossibleMoves(currentPlayer))
+                return (true, "Current game is in Stalemate! /n Game is a draw.");
 
             // Check for King moves that can save it
             foreach (Position pos in kingPossibleMoves)
@@ -253,7 +255,6 @@ namespace Chess
                     }
                 }
             }
-            //KingInCheckUpdate(currentPlayer); ¬¬¬¬¬ why did i put this here? 
             return (true, $"{CurrentPlayer.Color} player is in Checkmate!");
         }
     }

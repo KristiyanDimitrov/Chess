@@ -104,7 +104,7 @@ namespace Chess
             Figures[position.Row, position.Column] = figure;
         }
 
-        // Used to validate moves
+        // Used to validate moves <<ShadowMove>> !!FIGURE POSSITION DOES NOT CHANGE!!
         public void MoveShadowFigure(Figure figure, Position position)
         {
             ClearFigure(figure);
@@ -172,7 +172,17 @@ namespace Chess
                 return -1;
         }
 
-        public bool IsOposingKingAlone(Figure.ColorList curentKingColor) => Figures.Cast<Figure>().ToArray().Any(x => x is not King && x.Color != curentKingColor);
+        public bool PlayerHasPossibleMoves(Player player)
+        {
+            foreach (Figure figure in Figures.Cast<Figure>().ToArray().Where(x => x?.Color == player.Color)) // For each figure that the player has
+            {
+                if (figure.PossibleMoves(this).Any())
+                {
+                    return true;
+                }
+            }
 
+            return false;
+        }
     }
 }
