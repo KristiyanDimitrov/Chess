@@ -28,7 +28,7 @@ namespace Chess
 
             Chessboard.MoveFigure(new Rook(7, 0, Figure.ColorList.White));
             Chessboard.MoveFigure(new Knight(7, 1, Figure.ColorList.White));
-            Chessboard.MoveFigure(new Bishop(7, 2, Figure.ColorList.White)); //7-2
+            Chessboard.MoveFigure(new Bishop(7, 2, Figure.ColorList.White));
             Chessboard.MoveFigure(new Queen(7, 3, Figure.ColorList.White));
             Chessboard.MoveFigure(new King(7, 4, Figure.ColorList.White));
             Chessboard.MoveFigure(new Bishop(7, 5, Figure.ColorList.White));
