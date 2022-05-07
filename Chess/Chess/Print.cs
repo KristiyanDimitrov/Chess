@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Chess.Figures.Properties;
+using System.Windows.Forms;
 
 namespace Chess
 {
@@ -197,6 +198,11 @@ namespace Chess
                 if (exporters.FirstOrDefault() != null)
                     return exporters.FirstOrDefault();
             }
+        }
+
+        public static void DisplayMessageBoxMsg(string msg)
+        {
+            MessageBox.Show(msg);
         }
     } 
 }

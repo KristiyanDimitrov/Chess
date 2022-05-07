@@ -11,7 +11,7 @@ namespace Chess
         {
             Game currentGame = new();
 
-            while (!currentGame.GameEnded)
+            while (!currentGame.GameEnded.Item1)
             {
                 Console.Clear();
                 Print.PrintBoard(currentGame.Chessboard);
@@ -22,8 +22,11 @@ namespace Chess
                 //Get possible moves
                 List<Position> possibleMoves = currentGame.GetPossibleMoves(from);
                 if (!possibleMoves.Any())
-                    continue;              
-
+                {
+                    Print.DisplayMessageBoxMsg("Figure has no possible moves!");
+                    continue;
+                }
+                             
                 Console.Clear();
                 Print.PrintBoard(currentGame.Chessboard, possibleMoves);
 
@@ -36,6 +39,13 @@ namespace Chess
 
                 currentGame.PlayMove(from, to);
             }
+
+            Console.Clear();
+            Print.PrintBoard(currentGame.Chessboard);
+
+            Print.DisplayMessageBoxMsg(currentGame.GameEnded.Item2);
+            Console.ReadKey();
+
         }
     }
 }

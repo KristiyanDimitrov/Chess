@@ -12,13 +12,13 @@ namespace Chess
         public int Turn { get; private set; }
         public Player CurrentPlayer { get; private set; }
         public Player[] Players = new Player[2];
-        public bool GameEnded { get; private set; }
+        public (bool, string) GameEnded { get; private set; }
 
         public Game()
         {
             Chessboard = new Board(8, 8);
             Turn = 1;
-            GameEnded = false;
+            GameEnded = (false,"");
             SetBoard();
             CurrentPlayer = Players.FirstOrDefault(x => x.Color == Figure.ColorList.White);
         }
@@ -41,7 +41,7 @@ namespace Chess
             Chessboard.MoveFigure(new Pawn(6, 4, Figure.ColorList.White));
             Chessboard.MoveFigure(new Pawn(6, 5, Figure.ColorList.White));
             Chessboard.MoveFigure(new Pawn(6, 6, Figure.ColorList.White));
-            Chessboard.MoveFigure(new Pawn(4, 7, Figure.ColorList.Black));
+            Chessboard.MoveFigure(new Pawn(6, 7, Figure.ColorList.White));
 
             Chessboard.MoveFigure(new Rook(0, 0, Figure.ColorList.Black));
             Chessboard.MoveFigure(new Knight(0, 1, Figure.ColorList.Black));
@@ -107,6 +107,7 @@ namespace Chess
             CurrentPlayer = CurrentPlayer.Color == Figure.ColorList.White ? Players.FirstOrDefault(x => x.Color == Figure.ColorList.Black) : Players.FirstOrDefault(x => x.Color == Figure.ColorList.White);
 
             KingInCheckUpdate(CurrentPlayer);
+            GameEnded = EndgameUpdate(CurrentPlayer);
         }
 
         public List<Position> GetPossibleMoves(Position from)
@@ -123,12 +124,14 @@ namespace Chess
             This method uses "ShadowMoves" to check the consequences of a move. A ShadowMove consists of making the move in a controlled and reversible way,
         in order to use the existing methods of checking possible moves. 
             This helps to check if the state of the board after a move is valid. For example if it puts a friendly king in danger.
+            
+            <<ShadowMove>> !!FIGURE POSSITION DOES NOT CHANGE!!
         
             This method is also checks if friendly king is in danger during the Castle move.
         */
         private void KingCheck(Figure.ColorList color, Figure selectedFigure, List<Position> moves)
         {
-            Position theKingPos = Chessboard.GetKingFigure(color).GetPosition(); // When the figure to move is the King this breaks the logic ¬¬¬¬¬¬¬
+            Position theKingPos = Chessboard.GetKingFigure(color).GetPosition();
             List<Position> movesToRemove = new();
      
 
@@ -170,9 +173,10 @@ namespace Chess
         }
 
         // Check if the played move puts the opponents King in Check
-        private void KingInCheckUpdate(Player currentPlayer)
+        private void KingInCheckUpdate(Player currentPlayer, Position KingShadowPosition = null)
         {
-            King theKing = (King)Chessboard.GetKingFigure(CurrentPlayer.Color == Figure.ColorList.Black ? Figure.ColorList.White : Figure.ColorList.Black);
+            King theKing = (King)Chessboard.GetKingFigure(currentPlayer.Color == Figure.ColorList.Black ? Figure.ColorList.White : Figure.ColorList.Black);
+            Position theKingPosition = KingShadowPosition ?? theKing.FigurePosition;
 
             for (int x = Chessboard.Rows - 1; x >= 0; x--)
             {
@@ -183,16 +187,75 @@ namespace Chess
                         continue;
 
                     List<Position> curFigurePossibleMoves = curFigure.PossibleMoves(Chessboard);
-                    if (curFigurePossibleMoves.Exists(move => move.Column == theKing.FigurePosition.Column && move.Row == theKing.FigurePosition.Row))
+                    if (curFigurePossibleMoves.Exists(move => move.Column == theKingPosition.Column && move.Row == theKingPosition.Row))
                     {
-                        theKing.KingInCheck = true; // Don't like the check being in two places, will be like this for now until I figure out how to implement it best ¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬
+                        theKing.KingInCheck = true;
                         currentPlayer.InCheck = true;
                         return;
                     }
                 }
             }
+
             theKing.KingInCheck = false;
             currentPlayer.InCheck = false;
+        }
+
+        private (bool, string) EndgameUpdate(Player currentPlayer)
+        {
+            if (currentPlayer.InCheck)
+                return (false, "");
+
+            King theKing = (King)Chessboard.GetKingFigure(CurrentPlayer.Color);
+            var kingPossibleMoves = theKing.PossibleMoves(Chessboard);
+            KingCheck(theKing.Color, theKing, kingPossibleMoves);
+
+            Player oposingPlayer = Players.FirstOrDefault(x => x.Color != theKing.Color); // KingCheck() is for 
+
+            // Check for stalemate
+            if (Chessboard.PlayerHasPossibleMoves(currentPlayer))
+                return (true, "Current game is in Stalemate! /n Game is a draw.");
+
+            // Check for King moves that can save it
+            foreach (Position pos in kingPossibleMoves)
+            {
+                Chessboard.MoveShadowFigure(theKing, pos);
+
+                KingInCheckUpdate(oposingPlayer);
+                if (!theKing.KingInCheck)
+                {
+                    Chessboard.ResetShadowMove(theKing, pos);
+                    return (false, "");
+                }
+
+                Chessboard.ResetShadowMove(theKing, pos);
+            }
+
+            // Check for other moves that can save the king
+            for (int x = Chessboard.Rows - 1; x >= 0; x--)
+            {
+                for (int y = 0; y <= Chessboard.Columns - 1; y++)
+                {
+                    Figure curFigure = Chessboard.GetFigureFromPosition(x, y);
+                    if (curFigure == null || curFigure.Color != theKing.Color)
+                        continue;
+
+                    List<Position> curFigurePossibleMoves = curFigure.PossibleMoves(Chessboard);
+                    foreach (Position pos in curFigurePossibleMoves)
+                    {
+                        Chessboard.MoveShadowFigure(curFigure, pos);
+
+                        KingInCheckUpdate(oposingPlayer, curFigure is King ? pos : null);
+                        if (!theKing.KingInCheck)
+                        {
+                            Chessboard.ResetShadowMove(curFigure, pos);
+                            return (false, "");
+                        }                            
+
+                        Chessboard.ResetShadowMove(curFigure, pos);
+                    }
+                }
+            }
+            return (true, $"{CurrentPlayer.Color} player is in Checkmate!");
         }
     }
 }

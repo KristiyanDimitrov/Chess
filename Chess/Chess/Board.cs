@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Chess.Figures;
 using Chess.Figures.Properties;
 
 namespace Chess
@@ -103,7 +104,7 @@ namespace Chess
             Figures[position.Row, position.Column] = figure;
         }
 
-        // Used to validate moves
+        // Used to validate moves <<ShadowMove>> !!FIGURE POSSITION DOES NOT CHANGE!!
         public void MoveShadowFigure(Figure figure, Position position)
         {
             ClearFigure(figure);
@@ -169,6 +170,19 @@ namespace Chess
                 return charPosition[Char.ToUpper(letter)];
             else
                 return -1;
+        }
+
+        public bool PlayerHasPossibleMoves(Player player)
+        {
+            foreach (Figure figure in Figures.Cast<Figure>().ToArray().Where(x => x?.Color == player.Color)) // For each figure that the player has
+            {
+                if (figure.PossibleMoves(this).Any())
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 }
