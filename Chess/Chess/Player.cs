@@ -2,7 +2,7 @@
 
 namespace Chess
 {
-    struct Player
+    public struct Player
     {
         public Player(Figure.ColorList color)
         {

@@ -9,11 +9,11 @@ namespace ChessApp.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class GameController : ControllerBase
+    public class GameMoveController : ControllerBase
     {
         private readonly IConfiguration _configuration;
 
-        public GameController(IConfiguration configuration)
+        public GameMoveController(IConfiguration configuration)
         {
             _configuration = configuration;
         }
@@ -21,7 +21,7 @@ namespace ChessApp.Controllers
         [HttpGet]
         public JsonResult Get()
         {
-            string query = @"SELECT GameID, WhitePlayer, BlackPlayer, WinnerID FROM dbo.Game";
+            string query = @"SELECT MoveID, GameID, PlayerID, Position FROM dbo.GameMoves";
             DataTable table = new DataTable();
             string sqlDataSource = _configuration.GetConnectionString("ChessAppCon");
 
@@ -43,17 +43,19 @@ namespace ChessApp.Controllers
         }
 
         [HttpPost]
-        public JsonResult Post(Game game)
+        public JsonResult Post( GameMove move)
         {
-            string query = @"INSERT INTO dbo.Game
-                                (GameID, WhitePlayer, BlackPlayer, WinnerID)
+            string query = @"INSERT INTO dbo.GameMoves
+                                (MoveID, GameID, PlayerID, Position)
                                 values
                                 (
-                                    " + game.GameID + @"'
-                                    ,'" + game.WhitePlayer + @"'
-                                    ,'" + game.BlackPlayer + @"'
-                                    ,'" + game.WinnerID + @"'
+                                    " + move.MoveID + @"'
+                                    ,'" + move.GameID + @"'
+                                    ,'" + move.PlayerID + @"'
+                                    ,'" + move.Position + @"'
                                 )";
+
+
             DataTable table = new DataTable();
             string sqlDataSource = _configuration.GetConnectionString("ChessAppCon");
 
@@ -73,6 +75,5 @@ namespace ChessApp.Controllers
 
             return new JsonResult(table);
         }
-
     }
 }

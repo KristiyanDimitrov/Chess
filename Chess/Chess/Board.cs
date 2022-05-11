@@ -9,7 +9,7 @@ namespace Chess
     {
         public int Rows { get; set; }
         public int Columns { get; set; }
-        private Figure [,] Figures { get; set; }
+        public Figure [,] Figures { get; }
         public List<Figure> TakenFigures{ get; private set; }
         private Figure _figureShadowBuffer;
 

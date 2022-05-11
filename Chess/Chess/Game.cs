@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace Chess
 {
-    class Game
+    public class Game
     {
         public Board Chessboard { get; private set; }
         public int Turn { get; private set; }
