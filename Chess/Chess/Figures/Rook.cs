@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Chess.Figures.Properties;
+using Newtonsoft.Json;
 
 namespace Chess.Figures
 {
@@ -7,7 +8,7 @@ namespace Chess.Figures
     class Rook : Figure
     {
         public Rook(int row, int column, ColorList color) : base(row, column, color) { }
-
+        [JsonIgnore]
         public bool IsFirstMove { get; private set; } = true;
 
         public override List<Position> PossibleMoves(Board board)

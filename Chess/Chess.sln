@@ -5,7 +5,7 @@ VisualStudioVersion = 17.1.32421.90
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Chess", "Chess\Chess.csproj", "{5218C4E2-920C-4EDE-BDAC-96C776279BD9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChessApp", "ChessApp\ChessApp.csproj", "{CDEAF246-DA29-4D84-B767-37BACA59457F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChessAppAPI", "ChessApp\ChessAppAPI.csproj", "{CDEAF246-DA29-4D84-B767-37BACA59457F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Chess.Figures.Properties;
+using Newtonsoft.Json;
 
 namespace Chess.Figures
 {
@@ -9,6 +10,7 @@ namespace Chess.Figures
     class King : Figure
     {
         public King(int row, int column, ColorList color) : base(row, column, color) { }
+        [JsonIgnore]
         public bool KingInCheck { get; set; } = false;
         private Dictionary<Position, Rook> _castleMoveRook = new();
         private bool _isFirstMove = true;

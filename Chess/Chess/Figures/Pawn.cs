@@ -1,13 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using Chess.Figures.Properties;
+using Newtonsoft.Json;
 
 namespace Chess.Figures
 {
     [FigureInfo("Pawn", "P")]
     public class Pawn : Figure
     {
+        [JsonIgnore]
         public bool EnPassant { get; private set; }
+        [JsonIgnore]
+        private bool _firstMove = true;
         public Pawn(int row, int column, ColorList color) : base(row, column, color) { }
 
         public override List<Position> PossibleMoves(Board board)
@@ -63,6 +67,6 @@ namespace Chess.Figures
         }
 
         public override string ToString() => "P";
-        private bool _firstMove = true;
+        
     }
 }
