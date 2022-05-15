@@ -44,14 +44,14 @@ namespace ChessApp.Controllers
         }
 
         [Route("PlayMove/{fromRow}-{fromCol}--{toRow}-{toCol}")]
-        public string PlayMove(int fromRow, int fromCol, int toRow, int toCol)
+        public JsonResult PlayMove(int fromRow, int fromCol, int toRow, int toCol)
         {
             Position fromPos = new Position(fromRow, fromCol);
             Position toPos = new Position(toRow, toCol);
 
             _curentGame.PlayMove(fromPos, toPos);
 
-            return "Move Played";
+            return new JsonResult(JsonConvert.SerializeObject("Figure moved."));
         }
 
 

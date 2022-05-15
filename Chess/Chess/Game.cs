@@ -112,7 +112,7 @@ namespace Chess
         public List<Position> GetPossibleMoves(Position from)
         {
             Figure selectedFigure = Chessboard.GetFigureFromPosition(from);
-            List<Position> possibleMoves = selectedFigure.PossibleMoves(Chessboard);
+            List<Position> possibleMoves = selectedFigure?.PossibleMoves(Chessboard);
 
             KingCheck(selectedFigure.Color, selectedFigure, possibleMoves);//Remove moves that will put friendly King in Check
 
