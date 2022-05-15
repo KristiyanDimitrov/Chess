@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Chess.Figures.Properties;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 
@@ -33,42 +34,27 @@ namespace ChessApp.Controllers
         }
 
 
-        [Route("GetAllDepartmentNames")]
-        public JsonResult GetAllDepartmentNames()
+        [Route("GetPossibleMoves/{row}-{col}")]
+        public JsonResult GetPossibleMoves(int row, int col)
         {
+            Position fromPos = new Position(row, col);
+            var possibleMoves = _curentGame.GetPossibleMoves(fromPos);
 
-
-            return new JsonResult("test");
+            return new JsonResult(JsonConvert.SerializeObject(possibleMoves));
         }
 
-        public void GameStart()
+        [Route("PlayMove/{fromRow}-{fromCol}--{toRow}-{toCol}")]
+        public string PlayMove(int fromRow, int fromCol, int toRow, int toCol)
         {
-            Chess.Game currentGame = new();
+            Position fromPos = new Position(fromRow, fromCol);
+            Position toPos = new Position(toRow, toCol);
 
-            //while (!currentGame.GameEnded)
-            //{
-            //    Print.PrintBoard(currentGame.Chessboard);
+            _curentGame.PlayMove(fromPos, toPos);
 
-            //    //Validates position is valid and it contains a figure that corresponds to the current player color
-            //    Position from = Print.GetPositionFrom_User(currentGame);
+            return "Move Played";
+        }
 
-            //    //Get possible moves
-            //    List<Position> possibleMoves = currentGame.GetPossibleMoves(from);
-            //    if (!possibleMoves.Any())
-            //        continue;
 
-            //    Console.Clear();
-            //    Print.PrintBoard(currentGame.Chessboard, possibleMoves);
-
-            //    //Validates it is a valid position
-            //    Position to = Print.GetPositionTo_User(currentGame, possibleMoves);
-
-            //    //Play the selected move
-            //    if (to == null)
-            //        continue;
-
-            //    currentGame.PlayMove(from, to);
-            }
         }
        
 }

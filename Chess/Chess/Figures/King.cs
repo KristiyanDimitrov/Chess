@@ -14,7 +14,8 @@ namespace Chess.Figures
         public bool KingInCheck { get; set; } = false;
         private Dictionary<Position, Rook> _castleMoveRook = new();
         private bool _isFirstMove = true;
-        
+        public override string FigureName => this.ToString();
+
         public override List<Position> PossibleMoves(Board board)
         {
             _castleMoveRook = new Dictionary<Position, Rook>();

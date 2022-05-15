@@ -7,6 +7,7 @@ namespace Chess.Figures
     [FigureInfo("Knight", "N")]
     class Knight : Figure
     {
+        public override string FigureName => this.ToString();
         public Knight(int row, int column, ColorList color) : base(row, column, color) { }
 
         public override List<Position> PossibleMoves(Board board)

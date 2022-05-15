@@ -8,6 +8,7 @@ namespace Chess.Figures
     [FigureInfo("Pawn", "P")]
     public class Pawn : Figure
     {
+        public override string FigureName => this.ToString();
         [JsonIgnore]
         public bool EnPassant { get; private set; }
         [JsonIgnore]

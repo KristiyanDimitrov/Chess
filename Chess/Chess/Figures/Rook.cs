@@ -7,6 +7,7 @@ namespace Chess.Figures
     [FigureInfo("Rook", "R")]
     class Rook : Figure
     {
+        public override string FigureName => this.ToString();
         public Rook(int row, int column, ColorList color) : base(row, column, color) { }
         [JsonIgnore]
         public bool IsFirstMove { get; private set; } = true;
