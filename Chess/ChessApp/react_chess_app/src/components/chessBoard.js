@@ -1,6 +1,5 @@
 import React from 'react';
 import Square from './square.js';
-import getImage from '../helpers/getFigureImage.js';
 
 export default class ChessBoard extends React.Component{
 
@@ -16,21 +15,21 @@ export default class ChessBoard extends React.Component{
         this.setState({board:JSON.parse(data)});
     })};
 
-  renderSquare(i, squareShade, figureName){
-    const image = getImage(figureName);
+  renderSquare(i, squareShade, style){
     return (<Square
         key={i}
         keyVal={i}
-        style={image == '' ? image : require('' + image)}
+        style={require('./chess-king2.jpg')}
         shade={squareShade}
         onClick={() => this.props.onClick(i)}
       />)
     };
  
-  
+
   componentDidMount(){
       this.refresh();
     };
+
 
   render(){
     const builtBoard = [];
@@ -45,7 +44,7 @@ export default class ChessBoard extends React.Component{
           const squareShade = ( (isEven(rowcnt) && isEven(colcnt)) || (!isEven(rowcnt) && !isEven(colcnt)) ? "light-square" : "dark-square");
           const key = rowcnt.toString() + colcnt.toString();
   
-          squareRows.push(this.renderSquare(key, squareShade, figure?.FigureName ?? ''));
+          squareRows.push(this.renderSquare(key, squareShade));
 
           colcnt = colcnt + 1;
         });
