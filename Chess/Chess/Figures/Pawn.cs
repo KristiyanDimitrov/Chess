@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using Chess.Figures.Properties;
+using ChessLogic.Figures.Properties;
 
-namespace Chess.Figures
+namespace ChessLogic.Figures
 {
     [FigureInfo("Pawn", "P")]
     public class Pawn : Figure
@@ -13,9 +13,9 @@ namespace Chess.Figures
         public override List<Position> PossibleMoves(Board board)
         {
             List<Position> possiblePositions = new();
-            Position curPos= base.FigurePosition;
+            Position curPos= base.figurePosition;
 
-            if (base.Color == ColorList.Black)
+            if (base.color == ColorList.Black)
             {
                 for (int x = curPos.Row + 1; x <= curPos.Row + 1 + Convert.ToInt32(_firstMove); x++)
                 {
@@ -24,7 +24,7 @@ namespace Chess.Figures
 
                     for (int y = curPos.Column - 1; y <= curPos.Column + 1; y+=2)
                     {
-                        if (Math.Abs(x % curPos.Row) == 1 && ((board.ExistFigure(x, y) || board.IsEnPassantPossition(x, y)) && board.GetFigureFromPosition(x, y)?.Color != base.Color))
+                        if (Math.Abs(x % curPos.Row) == 1 && ((board.ExistFigure(x, y) || board.IsEnPassantPossition(x, y)) && board.GetFigureFromPosition(x, y)?.color != base.color))
                             possiblePositions.Add(new Position(x, y));
                     }
                 }
@@ -38,7 +38,7 @@ namespace Chess.Figures
 
                     for (int y = curPos.Column - 1; y <= curPos.Column + 1; y+=2)
                     {
-                        if ( Math.Abs(curPos.Row % x) == 1 && ((board.ExistFigure(x, y) || board.IsEnPassantPossition(x, y)) && board.GetFigureFromPosition(x, y)?.Color != base.Color))
+                        if ( Math.Abs(curPos.Row % x) == 1 && ((board.ExistFigure(x, y) || board.IsEnPassantPossition(x, y)) && board.GetFigureFromPosition(x, y)?.color != base.color))
                             possiblePositions.Add(new Position(x, y));
                     }
                 }
@@ -64,5 +64,6 @@ namespace Chess.Figures
 
         public override string ToString() => "P";
         private bool _firstMove = true;
+        public override int evalValue { get { return 1; } }
     }
 }

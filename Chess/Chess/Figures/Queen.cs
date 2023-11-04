@@ -1,17 +1,17 @@
 ﻿using System.Collections.Generic;
-using Chess.Figures.Properties;
+using ChessLogic.Figures.Properties;
 
-namespace Chess.Figures
+namespace ChessLogic.Figures
 {
     [FigureInfo("Queen", "Q")]
-    class Queen : Figure
+    public class Queen : Figure
     {
         public Queen(int row, int column, ColorList color) : base(row, column, color) { }
 
         public override List<Position> PossibleMoves(Board board)
         {
             List<Position> possiblePositions = new();
-            Position curPos = base.FigurePosition;
+            Position curPos = base.figurePosition;
             int x = curPos.Row;
             int y = curPos.Column;
 
@@ -47,5 +47,6 @@ namespace Chess.Figures
         }
 
         public override string ToString() => "Q";
+        public override int evalValue { get { return 9; } }
     }
 }

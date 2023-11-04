@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Chess.Figures.Properties;
+using ChessLogic.Figures.Properties;
 
-namespace Chess.Figures
+namespace ChessLogic.Figures
 {
     [FigureInfo("King","K")]
-    class King : Figure
+    public class King : Figure
     {
         public King(int row, int column, ColorList color) : base(row, column, color) { }
         public bool KingInCheck { get; set; } = false;
@@ -17,7 +17,7 @@ namespace Chess.Figures
         {
             _castleMoveRook = new Dictionary<Position, Rook>();
             List<Position> possiblePositions = new();
-            Position curPos = base.FigurePosition;
+            Position curPos = base.figurePosition;
             int curRow = curPos.Row;
             int curCol = curPos.Column;
 
@@ -63,25 +63,26 @@ namespace Chess.Figures
         {
             _isFirstMove = false;
             base.SetPosition(position);
-        }
-
-        public override string ToString() => "K";
+        }   
 
         public Tuple<Rook,Position> GetCastleMoveRook(Position kingMoveTo)
         {
             Position key = _castleMoveRook.Keys.FirstOrDefault(x => x.Column == kingMoveTo.Column && x.Row == kingMoveTo.Row);
 
-            if (key != null && Math.Abs(FigurePosition.Column - kingMoveTo.Column) == 2)
+            if (key != null && Math.Abs(figurePosition.Column - kingMoveTo.Column) == 2)
             {
                 Rook theRook = _castleMoveRook[key];
 
-                int kingToRookDistance = FigurePosition.Column - theRook.GetPosition().Column;
+                int kingToRookDistance = figurePosition.Column - theRook.GetPosition().Column;
                 int offset = kingToRookDistance > 0 ? -1 : 1;
 
-                return Tuple.Create(theRook, new Position(FigurePosition.Row, FigurePosition.Column + offset));
+                return Tuple.Create(theRook, new Position(figurePosition.Row, figurePosition.Column + offset));
             }
 
             return null;
         }
+
+        public override string ToString() => "K";
+        public override int evalValue { get { return 100; } }
     }
 }

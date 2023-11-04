@@ -1,24 +1,24 @@
 ﻿using System.Collections.Generic;
-using Chess.Figures.Properties;
+using ChessLogic.Figures.Properties;
 
-namespace Chess.Figures
+namespace ChessLogic.Figures
 {
     [FigureInfo("Bishop", "B")]
-    class Bishop : Figure
+    public class Bishop : Figure
     {
         public Bishop(int row, int column, ColorList color) : base(row, column, color) { }
 
         public override List<Position> PossibleMoves(Board board)
         {
             List<Position> possiblePositions = new();
-            Position curPos = base.FigurePosition;
+            Position curPos = base.figurePosition;
             int x = curPos.Row;
             int y = curPos.Column;
 
             bool xPos, xNeg, yPos, yNeg; // Indicator if the diagonal is blocked
             xPos = xNeg = yPos = yNeg = true;
 
-            for (int i = 1 ;; i++)
+            for (int i = 1; ; i++)
             {
                 xPos = xPos ? board.BasicMoveValidate(possiblePositions, this, x + i, y + i) : false;
                 yNeg = yNeg ? board.BasicMoveValidate(possiblePositions, this, x + i, y - i) : false;
@@ -35,5 +35,6 @@ namespace Chess.Figures
 
 
         public override string ToString() => "B";
+        public override int evalValue { get { return 3; }}
     }
 }

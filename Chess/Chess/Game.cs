@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using Chess.Figures;
-using Chess.Figures.Properties;
+using ChessLogic.Figures;
+using ChessLogic.Figures.Properties;
 using System.Linq;
 
-namespace Chess
+namespace ChessLogic
 {
-    class Game
+    public class Game
     {
         public Board Chessboard { get; private set; }
         public int Turn { get; private set; }
@@ -71,7 +71,7 @@ namespace Chess
             #region SpecialMoves
             //Castling move - Handling the Rook
             if (selectedFigure is King)
-                if (Math.Abs(selectedFigure.FigurePosition.Column - to.Column) == 2)
+                if (Math.Abs(selectedFigure.figurePosition.Column - to.Column) == 2)
                 {
                     Tuple<Rook, Position> rookMove = ((King) selectedFigure).GetCastleMoveRook(to);
                     Chessboard.MoveFigure(rookMove.Item1, rookMove.Item2);
@@ -80,7 +80,7 @@ namespace Chess
             // Pawn Special Move - Promotion
             if (selectedFigure is Pawn && (to.Row == 0 || to.Row == Chessboard.Rows - 1))
             {
-                var transformedFigure = Print.GetPawnPromotion(to.Row, to.Column, selectedFigure.Color);
+                var transformedFigure = Print.GetPawnPromotion(to.Row, to.Column, selectedFigure.color);
                 selectedFigure = transformedFigure;
             }
 
@@ -95,7 +95,7 @@ namespace Chess
             if (selectedFigure is Pawn && ((Pawn)selectedFigure).EnPassant)
             {
                 Chessboard.EnPassantEnabledPawn = selectedFigure;
-                Chessboard.EnPassantPosition = new Position(selectedFigure.FigurePosition.Row - 1, selectedFigure.FigurePosition.Column);
+                Chessboard.EnPassantPosition = new Position(selectedFigure.figurePosition.Row - 1, selectedFigure.figurePosition.Column);
             }
             else
             {
@@ -115,7 +115,7 @@ namespace Chess
             Figure selectedFigure = Chessboard.GetFigureFromPosition(from);
             List<Position> possibleMoves = selectedFigure.PossibleMoves(Chessboard);
 
-            KingCheck(selectedFigure.Color, selectedFigure, possibleMoves);//Remove moves that will put friendly King in Check
+            KingCheck(selectedFigure.color, selectedFigure, possibleMoves);//Remove moves that will put friendly King in Check
 
             return possibleMoves;
         }
@@ -145,7 +145,7 @@ namespace Chess
                     for (int y = 0; y <= Chessboard.Columns - 1; y++)
                     {
                         Figure curFigure = Chessboard.GetFigureFromPosition(x, y);
-                        if (curFigure == null || curFigure.Color == color)
+                        if (curFigure == null || curFigure.color == color)
                             continue;
 
                         // If the potential move puts the friendly King in danger remove it from the list of possible moves
@@ -176,14 +176,14 @@ namespace Chess
         private void KingInCheckUpdate(Player currentPlayer, Position KingShadowPosition = null)
         {
             King theKing = (King)Chessboard.GetKingFigure(currentPlayer.Color == Figure.ColorList.Black ? Figure.ColorList.White : Figure.ColorList.Black);
-            Position theKingPosition = KingShadowPosition ?? theKing.FigurePosition;
+            Position theKingPosition = KingShadowPosition ?? theKing.figurePosition;
 
             for (int x = Chessboard.Rows - 1; x >= 0; x--)
             {
                 for (int y = 0; y <= Chessboard.Columns - 1; y++)
                 {
                     Figure curFigure = Chessboard.GetFigureFromPosition(x, y);
-                    if (curFigure == null || curFigure.Color == theKing.Color)
+                    if (curFigure == null || curFigure.color == theKing.color)
                         continue;
 
                     List<Position> curFigurePossibleMoves = curFigure.PossibleMoves(Chessboard);
@@ -207,9 +207,9 @@ namespace Chess
 
             King theKing = (King)Chessboard.GetKingFigure(CurrentPlayer.Color);
             var kingPossibleMoves = theKing.PossibleMoves(Chessboard);
-            KingCheck(theKing.Color, theKing, kingPossibleMoves);
+            KingCheck(theKing.color, theKing, kingPossibleMoves);
 
-            Player oposingPlayer = Players.FirstOrDefault(x => x.Color != theKing.Color); // KingCheck() is for 
+            Player oposingPlayer = Players.FirstOrDefault(x => x.Color != theKing.color); // KingCheck() is for 
 
             // Check for stalemate
             if (Chessboard.PlayerHasPossibleMoves(currentPlayer))
@@ -236,7 +236,7 @@ namespace Chess
                 for (int y = 0; y <= Chessboard.Columns - 1; y++)
                 {
                     Figure curFigure = Chessboard.GetFigureFromPosition(x, y);
-                    if (curFigure == null || curFigure.Color != theKing.Color)
+                    if (curFigure == null || curFigure.color != theKing.color)
                         continue;
 
                     List<Position> curFigurePossibleMoves = curFigure.PossibleMoves(Chessboard);

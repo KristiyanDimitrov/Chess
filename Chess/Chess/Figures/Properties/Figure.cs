@@ -1,35 +1,37 @@
 ﻿using System.Collections.Generic;
 
-namespace Chess.Figures.Properties
+namespace ChessLogic.Figures.Properties
 {
     public abstract class Figure
     {
-        public enum ColorList{White, Black}
-        public ColorList Color { get; private set; }
-        public Position FigurePosition; //Relationship
+        public enum ColorList { White, Black }
+        public ColorList color { get; private set; }
+        public Position figurePosition; //Relationship
+        public abstract int evalValue { get; }
+
 
         public abstract List<Position> PossibleMoves(Board board);
         public abstract override string ToString();
 
         protected Figure (int row, int column, ColorList color )
         {
-            Color = color;
-            FigurePosition = new Position(row, column);
+            this.color = color;
+            figurePosition = new Position(row, column);
         }
 
         public virtual void SetPosition (int row, int column)
         {
-            FigurePosition.SetPosition(row, column);
+            figurePosition.SetPosition(row, column);
         }
 
         public virtual void SetPosition(Position position)
         {
-            FigurePosition.SetPosition(position.Row, position.Column);
+            figurePosition.SetPosition(position.Row, position.Column);
         }
 
         public Position GetPosition()
         {
-            return FigurePosition;
+            return figurePosition;
         }
 
     }

@@ -1,6 +1,6 @@
-﻿using Chess.Figures.Properties;
+﻿using ChessLogic.Figures.Properties;
 
-namespace Chess
+namespace ChessLogic
 {
     public struct Player
     {
