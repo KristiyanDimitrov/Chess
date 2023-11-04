@@ -1,6 +1,6 @@
 ﻿
 
-namespace Chess.Figures.Properties
+namespace ChessLogic.Figures.Properties
 {
     public class Position
     {

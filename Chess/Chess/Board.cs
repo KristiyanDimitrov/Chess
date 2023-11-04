@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Chess.Figures;
-using Chess.Figures.Properties;
+using ChessLogic.Figures;
+using ChessLogic.Figures.Properties;
 
-namespace Chess
+namespace ChessLogic
 {
     public class Board
     {
@@ -31,12 +31,12 @@ namespace Chess
             if (!ValidatePosition(new Position(x,y)))
                 return false;
 
-            if (ExistFigure(x, y) && GetFigureFromPosition(x, y).Color != figure.Color)
+            if (ExistFigure(x, y) && GetFigureFromPosition(x, y).color != figure.color)
             {
                 possiblePositions.Add(new Position(x, y));
                 return false;
             }
-            else if (GetFigureFromPosition(x, y)?.Color == figure.Color)
+            else if (GetFigureFromPosition(x, y)?.color == figure.color)
             {
                 return false;
             }                
@@ -69,6 +69,7 @@ namespace Chess
             else
                 return false;
         }
+
         public bool ExistFigure(int x, int y)
         {
             Position position = new(x, y);
@@ -115,13 +116,14 @@ namespace Chess
 
             Figures[position.Row, position.Column] = figure;
         }
+
         public void ResetShadowMove(Figure figure, Position position) 
         {
-            Figures[figure.FigurePosition.Row, figure.FigurePosition.Column] = figure;
+            Figures[figure.figurePosition.Row, figure.figurePosition.Column] = figure;
 
             if (_figureShadowBuffer != null)
             {
-                Figures[_figureShadowBuffer.FigurePosition.Row, _figureShadowBuffer.FigurePosition.Column] = _figureShadowBuffer;
+                Figures[_figureShadowBuffer.figurePosition.Row, _figureShadowBuffer.figurePosition.Column] = _figureShadowBuffer;
                 _figureShadowBuffer = null;
             } 
             else
@@ -134,6 +136,7 @@ namespace Chess
                 return true;
             return false;
         }
+
         public void ClearFigure(Figure figure, bool isRemoved = false)
         {
             Position position = figure.GetPosition();
@@ -152,7 +155,7 @@ namespace Chess
             return figure;
         }
 
-        public Figure GetKingFigure(Figure.ColorList color) => Figures.Cast<Figure>().ToArray().FirstOrDefault(x => x?.Color == color && x.GetType().Name == "King");
+        public Figure GetKingFigure(Figure.ColorList color) => Figures.Cast<Figure>().ToArray().FirstOrDefault(x => x?.color == color && x.GetType().Name == "King");
 
         public static int GetLetterMap(char letter)
         {
@@ -174,7 +177,7 @@ namespace Chess
 
         public bool PlayerHasPossibleMoves(Player player)
         {
-            foreach (Figure figure in Figures.Cast<Figure>().ToArray().Where(x => x?.Color == player.Color)) // For each figure that the player has
+            foreach (Figure figure in Figures.Cast<Figure>().ToArray().Where(x => x?.color == player.Color)) // For each figure that the player has
             {
                 if (figure.PossibleMoves(this).Any())
                 {

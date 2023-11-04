@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Chess.Figures.Properties;
+using ChessLogic.Figures.Properties;
 
-namespace Chess
+namespace ChessLogic
 {
-    class Program
+    public class Program
     {
         static void Main()
         {

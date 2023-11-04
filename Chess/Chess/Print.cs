@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Chess.Figures.Properties;
+using ChessLogic.Figures.Properties;
 using System.Windows.Forms;
 
-namespace Chess
+namespace ChessLogic
 {
     class Print
     {      
@@ -56,7 +56,7 @@ namespace Chess
             }
             else
             {
-                if (figure.Color == Figure.ColorList.White)
+                if (figure.color == Figure.ColorList.White)
                 {
                     if (isPossbile)
                     {
@@ -111,9 +111,9 @@ namespace Chess
                 {
                     Console.WriteLine("No figure in this position. Please enter again.");
                 }
-                else if (chessboard.GetFigureFromPosition(position).Color != game.CurrentPlayer.Color)
+                else if (chessboard.GetFigureFromPosition(position).color != game.CurrentPlayer.Color)
                 {
-                    Console.WriteLine("Can't move a {0} piece as the {1} player. Please enter again.", chessboard.GetFigureFromPosition(position).Color, game.CurrentPlayer);
+                    Console.WriteLine("Can't move a {0} piece as the {1} player. Please enter again.", chessboard.GetFigureFromPosition(position).color, game.CurrentPlayer);
                 }
                 else
                     break;
@@ -144,9 +144,9 @@ namespace Chess
                 {
                     Console.WriteLine("Not a valid position. Please enter again.");
                 }
-                else if (chessboard.GetFigureFromPosition(position)?.Color == game.CurrentPlayer.Color)
+                else if (chessboard.GetFigureFromPosition(position)?.color == game.CurrentPlayer.Color)
                 {
-                    Console.WriteLine("Can't move a {0} piece over a {1} peice. Please enter again.", chessboard.GetFigureFromPosition(position).Color, game.CurrentPlayer);
+                    Console.WriteLine("Can't move a {0} piece over a {1} peice. Please enter again.", chessboard.GetFigureFromPosition(position).color, game.CurrentPlayer);
                 }
                 else
                     break;
@@ -160,7 +160,7 @@ namespace Chess
             Console.Write("White player taken figures: ");
             foreach (Figure f in chessboard.TakenFigures)
             {
-                if(f.Color == Figure.ColorList.White)
+                if(f.color == Figure.ColorList.White)
                     Console.Write(" {0},",(f));
             }
 
@@ -169,7 +169,7 @@ namespace Chess
             Console.Write("Black player taken figures: ");
             foreach (Figure f in chessboard.TakenFigures)
             {
-                if (f.Color == Figure.ColorList.Black)
+                if (f.color == Figure.ColorList.Black)
                     Console.Write(" {0},", (f));
             }
 

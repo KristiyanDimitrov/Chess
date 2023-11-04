@@ -1,18 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
-using Chess.Figures.Properties;
+using ChessLogic.Figures.Properties;
 
-namespace Chess.Figures
+namespace ChessLogic.Figures
 {
     [FigureInfo("Knight", "N")]
-    class Knight : Figure
+    public class Knight : Figure
     {
         public Knight(int row, int column, ColorList color) : base(row, column, color) { }
 
         public override List<Position> PossibleMoves(Board board)
         {
             List<Position> possiblePositions = new();
-            Position curPos = base.FigurePosition;
+            Position curPos = base.figurePosition;
             int curRow = curPos.Row;
             int curCol = curPos.Column;
 
@@ -25,5 +25,6 @@ namespace Chess.Figures
         }
 
         public override string ToString() => "N";
+        public override int evalValue { get { return 3; } }
     }
 }

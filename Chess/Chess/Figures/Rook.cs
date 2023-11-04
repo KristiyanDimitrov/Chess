@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
-using Chess.Figures.Properties;
+using ChessLogic.Figures.Properties;
 
-namespace Chess.Figures
+namespace ChessLogic.Figures
 {
     [FigureInfo("Rook", "R")]
-    class Rook : Figure
+    public class Rook : Figure
     {
         public Rook(int row, int column, ColorList color) : base(row, column, color) { }
 
@@ -13,7 +13,7 @@ namespace Chess.Figures
         public override List<Position> PossibleMoves(Board board)
         {
             List<Position> possiblePositions = new();
-            Position curPos = base.FigurePosition;
+            Position curPos = base.figurePosition;
 
             int curRow = curPos.Row;
             int curCol = curPos.Column;
@@ -47,5 +47,6 @@ namespace Chess.Figures
             base.SetPosition(position);
         }
         public override string ToString() => "R";
+        public override int evalValue { get { return 5; } }
     }
 }
