@@ -23,7 +23,7 @@ namespace ChessLogic
             CurrentPlayer = Players.FirstOrDefault(x => x.Color == Figure.ColorList.White);
         }
 
-        public void SetBoard()
+        private void SetBoard()
         {
 
             Chessboard.MoveFigure(new Rook(7, 0, Figure.ColorList.White));
