@@ -41,7 +41,7 @@ namespace Chess
             Chessboard.MoveFigure(new Pawn(6, 4, Figure.ColorList.White));
             Chessboard.MoveFigure(new Pawn(6, 5, Figure.ColorList.White));
             Chessboard.MoveFigure(new Pawn(6, 6, Figure.ColorList.White));
-            Chessboard.MoveFigure(new Pawn(6, 7, Figure.ColorList.White));
+            Chessboard.MoveFigure(new Pawn(4, 7, Figure.ColorList.Black));
 
             Chessboard.MoveFigure(new Rook(0, 0, Figure.ColorList.Black));
             Chessboard.MoveFigure(new Knight(0, 1, Figure.ColorList.Black));
