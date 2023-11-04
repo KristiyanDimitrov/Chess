@@ -68,7 +68,7 @@ namespace ChessUI
 
         private void BoardGrid_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            Point point = e.GetPosition(BoarddGrid);
+            Point point = e.GetPosition(BoardGrid);
             Position lastSelectedPos = ToSquarePosition(point);
 
             if (selectedPos == null && currentGame.Chessboard.ExistFigure(lastSelectedPos))
@@ -90,7 +90,7 @@ namespace ChessUI
 
         private Position ToSquarePosition(Point poit)
         {
-            double squareSize = BoarddGrid.ActualWidth / 8;
+            double squareSize = BoardGrid.ActualWidth / 8;
             int row = (int)(poit.Y / squareSize);
             int col = (int)(poit.X / squareSize);
 

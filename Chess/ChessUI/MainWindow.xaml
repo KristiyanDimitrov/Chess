@@ -10,7 +10,7 @@
         WindowStartupLocation="CenterScreen"
         Background="#101010">
     <Viewbox>
-        <Grid x:Name="BoarddGrid"
+        <Grid x:Name="BoardGrid"
               Width="600"
               Height="600"
               MouseDown="BoardGrid_MouseDown">
