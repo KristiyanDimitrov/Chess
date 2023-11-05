@@ -17,9 +17,8 @@ namespace ChessLogic.Figures
         {
             _castleMoveRook = new Dictionary<Position, Rook>();
             List<Position> possiblePositions = new();
-            Position curPos = base.figurePosition;
-            int curRow = curPos.Row;
-            int curCol = curPos.Column;
+            int curRow = figurePosition.Row;
+            int curCol = figurePosition.Column;
 
             // Normal moves
             for (int x = -1; x <= 1; x++)
@@ -30,21 +29,25 @@ namespace ChessLogic.Figures
             // Castle move. The validation for fields under attack is done outside of this class in Game.GetPossibleMoves().
             if (_isFirstMove && !KingInCheck)
             {
-                for (int y = curCol; y >= 0; y--)
+                for (int y = curCol - 1; y >= 0; y--)
                 {
                     Figure figure = board.GetFigureFromPosition(curRow, y);
                     if (figure is null)
                         continue;
+                    if (figure is not Rook)
+                        break;
                     if (figure is Rook && ((Rook)figure).IsFirstMove)
                         if (board.BasicMoveValidate(possiblePositions, this, curRow, curCol - 2))
                             _castleMoveRook.Add(new Position(curRow, curCol - 2), figure as Rook); // The castle move of the king, the Rook figure or possition
                 }
 
-                for (int y = curCol; y <= 7; y++)
+                for (int y = curCol + 1; y <= 7; y++)
                 {
                     Figure figure = board.GetFigureFromPosition(curRow, y);
                     if (figure is null)
                         continue;
+                    if (figure is not Rook)
+                        break;
                     if (figure is Rook && ((Rook)figure).IsFirstMove)
                         if (board.BasicMoveValidate(possiblePositions, this, curRow, curCol + 2))
                             _castleMoveRook.Add(new Position(curRow, curCol + 2), figure as Rook);
