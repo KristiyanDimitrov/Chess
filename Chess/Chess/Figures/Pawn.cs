@@ -38,7 +38,7 @@ namespace ChessLogic.Figures
 
                     for (int y = curPos.Column - 1; y <= curPos.Column + 1; y+=2)
                     {
-                        if ( Math.Abs(curPos.Row % x) == 1 && ((board.ExistFigure(x, y) || board.IsEnPassantPossition(x, y)) && board.GetFigureFromPosition(x, y)?.color != base.color))
+                        if ( ((board.ExistFigure(x, y) || board.IsEnPassantPossition(x, y)) && board.GetFigureFromPosition(x, y)?.color != base.color))
                             possiblePositions.Add(new Position(x, y));
                     }
                 }
