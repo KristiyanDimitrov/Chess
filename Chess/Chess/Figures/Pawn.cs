@@ -22,12 +22,15 @@ namespace ChessLogic.Figures
                     if (!board.ExistFigure(x, curPos.Column) && (x == curPos.Row + 1 || possiblePositions.Exists(z => z.Row == curPos.Row + 1 && z.Column == curPos.Column)))
                         possiblePositions.Add(new Position(x, curPos.Column));
 
-                    for (int y = curPos.Column - 1; y <= curPos.Column + 1; y+=2)
+                    if(x == curPos.Row + 1)
                     {
-                        if (Math.Abs(x % curPos.Row) == 1 && ((board.ExistFigure(x, y) || board.IsEnPassantPossition(x, y)) && board.GetFigureFromPosition(x, y)?.color != base.color))
-                            possiblePositions.Add(new Position(x, y));
+                        for (int y = curPos.Column - 1; y <= curPos.Column + 1; y += 2)
+                        {
+                            if ((board.ExistFigure(x, y) || board.IsEnPassantPossition(x, y)) && board.GetFigureFromPosition(x, y)?.color != base.color)
+                                possiblePositions.Add(new Position(x, y));
+                        }
                     }
-                }
+                }                    
             }
             else
             {
@@ -36,10 +39,13 @@ namespace ChessLogic.Figures
                     if (!board.ExistFigure(x, curPos.Column) && (x == curPos.Row - 1 || possiblePositions.Exists( z => z.Row == curPos.Row - 1 && z.Column == curPos.Column)))
                         possiblePositions.Add(new Position(x, curPos.Column));
 
-                    for (int y = curPos.Column - 1; y <= curPos.Column + 1; y+=2)
+                    if (x == curPos.Row - 1)
                     {
-                        if ( ((board.ExistFigure(x, y) || board.IsEnPassantPossition(x, y)) && board.GetFigureFromPosition(x, y)?.color != base.color))
-                            possiblePositions.Add(new Position(x, y));
+                        for (int y = curPos.Column - 1; y <= curPos.Column + 1; y += 2)
+                        {
+                            if ((board.ExistFigure(x, y) || board.IsEnPassantPossition(x, y)) && board.GetFigureFromPosition(x, y)?.color != base.color)
+                                possiblePositions.Add(new Position(x, y));
+                        }
                     }
                 }
             }
