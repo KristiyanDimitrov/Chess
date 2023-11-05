@@ -104,7 +104,7 @@ namespace ChessUI
             if (selectFigure.color != currentGame.CurrentPlayer.Color)
                 return;
 
-            List<Position> possibleMoves = selectFigure.PossibleMoves(currentGame.Chessboard);
+            List<Position> possibleMoves = currentGame.GetPossibleMoves(pos);
 
             if (possibleMoves.Any())
             {
