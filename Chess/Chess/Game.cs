@@ -95,7 +95,8 @@ namespace ChessLogic
             if (selectedFigure is Pawn && ((Pawn)selectedFigure).EnPassant)
             {
                 Chessboard.EnPassantEnabledPawn = selectedFigure;
-                Chessboard.EnPassantPosition = new Position(selectedFigure.figurePosition.Row - 1, selectedFigure.figurePosition.Column);
+                int enPassantDirection = selectedFigure.color == Figure.ColorList.White ? 1 : -1;
+                Chessboard.EnPassantPosition = new Position(selectedFigure.figurePosition.Row + enPassantDirection, selectedFigure.figurePosition.Column);
             }
             else
             {
