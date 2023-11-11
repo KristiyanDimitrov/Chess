@@ -8,6 +8,9 @@ using ChessLogic;
 using ChessLogic.Figures.Properties;
 using Figure = ChessLogic.Figures.Properties.Figure;
 using System.Linq;
+using ChessLogic.Figures;
+using System;
+using System.Windows.Documents;
 
 namespace ChessUI
 {
@@ -17,12 +20,15 @@ namespace ChessUI
     public partial class MainWindow : Window
     {
         private readonly Image[,] figureImages = new Image[8, 8];
+        private readonly Image[] promotionFigureImages = new Image[4];
         private readonly Rectangle[,] highlights = new Rectangle[8, 8];
 
         private List<Position> moves = new();
 
         private Position selectedPos = null;
         private Game currentGame;
+
+        private bool inPromotion = false;
 
         public MainWindow()
         {
@@ -47,6 +53,13 @@ namespace ChessUI
                     highlights[r, c] = highlight;
                     HighlightGrid.Children.Add(highlight);
 
+                    if (r == 0 && c < 4)
+                    {
+                        Image promImage = new Image();
+                        promotionFigureImages[c] = promImage;
+                        PromotionGrid.Children.Add(promImage);
+                    }
+
                 }
             }
         }
@@ -59,11 +72,18 @@ namespace ChessUI
                 {
                     Figure figure = board.GetFigureFromPosition(r, c);
                     if (figure != null)
-                        figureImages[r, c].Source = Images.GetImage(figure);
+                        figureImages[r, c].Source = Images.GetImage(figure.GetType(), figure.color);
                     else
                         figureImages[r, c].Source = null;
                 }
             }
+        }
+
+        private void DrawPromotion(Figure.ColorList color)
+        {
+            List<Type> promotionTypes = new() { typeof(Knight), typeof(Bishop), typeof(Rook), typeof(Queen) };
+            for (int c = 0; c < 4; c++)
+                promotionFigureImages[c].Source = Images.GetImage(promotionTypes[c], color);
         }
 
         private void BoardGrid_MouseDown(object sender, MouseButtonEventArgs e)
@@ -73,6 +93,15 @@ namespace ChessUI
 
             if (selectedPos == null && currentGame.Chessboard.ExistFigure(lastSelectedPos))
                 OnFromPositionClick(lastSelectedPos);
+            else if (selectedPos != null && currentGame.Chessboard.GetFigureType(selectedPos).Name == "Pawn" && (lastSelectedPos.Row == 0 || lastSelectedPos.Row == currentGame.Chessboard.Rows - 1))
+            {
+                currentGame.PlayMove(selectedPos, lastSelectedPos);
+                selectedPos = null;
+                HideHighlights();
+                DrawPromotion(currentGame.Chessboard.GetFigureColor(lastSelectedPos));
+                DrawBoard(currentGame.Chessboard);           
+                inPromotion = true;
+            }
             else if (selectedPos != null && moves.Exists(m => m.Row == lastSelectedPos.Row && m.Column == lastSelectedPos.Column))
             {
                 currentGame.PlayMove(selectedPos, lastSelectedPos);
@@ -86,6 +115,8 @@ namespace ChessUI
                 HideHighlights();
             }
             
+
+
         }
 
         private Position ToSquarePosition(Point poit)

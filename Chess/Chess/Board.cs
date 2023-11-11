@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using ChessLogic.Figures;
 using ChessLogic.Figures.Properties;
@@ -68,6 +69,19 @@ namespace ChessLogic
                 return GetFigureFromPosition(position) != null;
             else
                 return false;
+        }
+
+        public Type GetFigureType(Position position)
+        {
+            var tst1 = GetFigureFromPosition(position);
+            var tst2 = tst1.GetType();
+
+            return GetFigureFromPosition(position).GetType();
+        }
+
+        public Figure.ColorList GetFigureColor(Position position)
+        {
+            return GetFigureFromPosition(position).color;
         }
 
         public bool ExistFigure(int x, int y)

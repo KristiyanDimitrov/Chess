@@ -32,6 +32,22 @@ namespace ChessUI
             {typeof(King),   LoadImage("Assets/KingB.png") }
         };
 
+        private static readonly Dictionary<Type, ImageSource> whiteSourcesPromotion = new()
+        {
+            {typeof(Bishop),  LoadImage("Assets/BishopW.png") },
+            {typeof(Knight),  LoadImage("Assets/KnightW.png") },
+            {typeof(Rook),    LoadImage("Assets/RookW.png") },
+            {typeof(Queen),   LoadImage("Assets/QueenW.png") },
+        };
+
+        private static readonly Dictionary<Type, ImageSource> blackSourcesPromotion = new()
+        {
+            {typeof(Bishop),  LoadImage("Assets/BishopW.png") },
+            {typeof(Knight),  LoadImage("Assets/KnightW.png") },
+            {typeof(Rook),    LoadImage("Assets/RookW.png") },
+            {typeof(Queen),   LoadImage("Assets/QueenW.png") },
+        };
+
         private static ImageSource LoadImage(string filePath)
         {
             return new BitmapImage(new Uri(filePath, UriKind.Relative));
@@ -47,10 +63,10 @@ namespace ChessUI
             };
         }
 
-        public static ImageSource GetImage(Figure figure)
-        {
-            return GetImage(figure.GetType(), figure.color);
-        }
+        //public static ImageSource GetImage(Figure figure)
+        //{
+        //    return GetImage(figure.GetType(), figure.color);
+        //}
 
     }
 }
