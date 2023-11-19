@@ -77,12 +77,12 @@ namespace ChessLogic
                     Chessboard.MoveFigure(rookMove.Item1, rookMove.Item2);
                 }
 
-            // Pawn Special Move - Promotion
-            if (selectedFigure is Pawn && (to.Row == 0 || to.Row == Chessboard.Rows - 1))
-            {
-                var transformedFigure = Print.GetPawnPromotion(to.Row, to.Column, selectedFigure.color);
-                selectedFigure = transformedFigure;
-            }
+            //// Pawn Special Move - Promotion
+            //if (selectedFigure is Pawn && (to.Row == 0 || to.Row == Chessboard.Rows - 1))
+            //{
+            //    var transformedFigure = Print.GetPawnPromotion(to.Row, to.Column, selectedFigure.color);
+            //    selectedFigure = transformedFigure;
+            //}
 
             // Pawn Special Move - En passant
             if (Chessboard.EnPassantEnabledPawn != null && selectedFigure is Pawn && Chessboard.IsEnPassantPossition(to.Row, to.Column))
@@ -119,6 +119,25 @@ namespace ChessLogic
             KingCheck(selectedFigure.color, selectedFigure, possibleMoves);//Remove moves that will put friendly King in Check
 
             return possibleMoves;
+        }
+
+        public void HandlePromotion(Position position, string promotionType)
+        {
+            switch (promotionType.ToString())
+            {
+                case "Queen":
+                    Chessboard.MoveFigure(new Queen(position.Row, position.Column, CurrentPlayer.OpositeColor));
+                    break;
+                case "Rook":
+                    Chessboard.MoveFigure(new Rook(position.Row, position.Column, CurrentPlayer.OpositeColor));
+                    break;
+                case "Bishop":
+                    Chessboard.MoveFigure(new Bishop(position.Row, position.Column, CurrentPlayer.OpositeColor));
+                    break;
+                case "Knight":
+                    Chessboard.MoveFigure(new Knight(position.Row, position.Column, CurrentPlayer.OpositeColor));
+                    break;
+            }              
         }
 
         /*

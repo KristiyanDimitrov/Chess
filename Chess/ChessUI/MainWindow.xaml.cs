@@ -8,6 +8,8 @@ using ChessLogic;
 using ChessLogic.Figures.Properties;
 using Figure = ChessLogic.Figures.Properties.Figure;
 using System.Linq;
+using ChessLogic.Figures;
+using System;
 
 namespace ChessUI
 {
@@ -46,7 +48,6 @@ namespace ChessUI
                     Rectangle highlight = new Rectangle();
                     highlights[r, c] = highlight;
                     HighlightGrid.Children.Add(highlight);
-
                 }
             }
         }
@@ -59,7 +60,7 @@ namespace ChessUI
                 {
                     Figure figure = board.GetFigureFromPosition(r, c);
                     if (figure != null)
-                        figureImages[r, c].Source = Images.GetImage(figure);
+                        figureImages[r, c].Source = Images.GetImage(figure.GetType(), figure.color);
                     else
                         figureImages[r, c].Source = null;
                 }
@@ -68,11 +69,31 @@ namespace ChessUI
 
         private void BoardGrid_MouseDown(object sender, MouseButtonEventArgs e)
         {
+            if (IsMenuOnScreen())
+                return;
+
             Point point = e.GetPosition(BoardGrid);
             Position lastSelectedPos = ToSquarePosition(point);
 
             if (selectedPos == null && currentGame.Chessboard.ExistFigure(lastSelectedPos))
                 OnFromPositionClick(lastSelectedPos);
+            else if (selectedPos != null && currentGame.Chessboard.GetFigureType(selectedPos).Name == "Pawn" && (lastSelectedPos.Row == 0 || lastSelectedPos.Row == currentGame.Chessboard.Rows - 1))
+            {
+                currentGame.PlayMove(selectedPos, lastSelectedPos);
+                selectedPos = null;
+                HideHighlights();
+
+                PromotionMenu promotionMenu = new PromotionMenu(currentGame.CurrentPlayer);
+                MenuContainer.Content = promotionMenu;
+
+                promotionMenu.FigureSelected += type =>
+                {
+                    MenuContainer.Content = null;
+                    currentGame.HandlePromotion(lastSelectedPos, type.Name.ToString());
+                };              
+
+                DrawBoard(currentGame.Chessboard);           
+            }
             else if (selectedPos != null && moves.Exists(m => m.Row == lastSelectedPos.Row && m.Column == lastSelectedPos.Column))
             {
                 currentGame.PlayMove(selectedPos, lastSelectedPos);
@@ -84,8 +105,9 @@ namespace ChessUI
             {
                 selectedPos = null;
                 HideHighlights();
-            }
-            
+            }     
+            else
+                DrawBoard(currentGame.Chessboard);
         }
 
         private Position ToSquarePosition(Point poit)
@@ -130,6 +152,11 @@ namespace ChessUI
             {
                 highlights[move.Row, move.Column].Fill = Brushes.Transparent;
             }
+        }
+
+        private bool IsMenuOnScreen()
+        {
+            return MenuContainer.Content != null;
         }
     }
 }
