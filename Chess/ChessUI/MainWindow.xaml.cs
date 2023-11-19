@@ -77,9 +77,9 @@ namespace ChessUI
 
             if (selectedPos == null && currentGame.Chessboard.ExistFigure(lastSelectedPos))
                 OnFromPositionClick(lastSelectedPos);
-            else if (selectedPos != null && currentGame.Chessboard.GetFigureType(selectedPos).Name == "Pawn" && (lastSelectedPos.Row == 0 || lastSelectedPos.Row == currentGame.Chessboard.Rows - 1))
+            else if (selectedPos != null && currentGame.Chessboard.GetFigureType(selectedPos).Name == "Pawn" && (lastSelectedPos.Row == 0 || lastSelectedPos.Row == currentGame.Chessboard.Rows - 1) && moves.Exists(m => m.Row == lastSelectedPos.Row && m.Column == lastSelectedPos.Column))
             {
-                currentGame.PlayMove(selectedPos, lastSelectedPos);
+                currentGame.PlayMove(selectedPos, lastSelectedPos, false);
                 selectedPos = null;
                 HideHighlights();
 
@@ -90,15 +90,17 @@ namespace ChessUI
                 {
                     MenuContainer.Content = null;
                     currentGame.HandlePromotion(lastSelectedPos, type.Name.ToString());
-                };              
-
+                    currentGame.EndPlayerTurn();
+                };
+                
                 DrawBoard(currentGame.Chessboard);           
             }
             else if (selectedPos != null && moves.Exists(m => m.Row == lastSelectedPos.Row && m.Column == lastSelectedPos.Column))
             {
-                currentGame.PlayMove(selectedPos, lastSelectedPos);
+                currentGame.PlayMove(selectedPos, lastSelectedPos, false);
                 selectedPos = null;
                 HideHighlights();
+                currentGame.EndPlayerTurn();
                 DrawBoard(currentGame.Chessboard);
             }              
             else if (selectedPos != null && !moves.Exists(m => m.Row == lastSelectedPos.Row && m.Column == lastSelectedPos.Column))

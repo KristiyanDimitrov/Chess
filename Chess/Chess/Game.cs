@@ -10,6 +10,7 @@ namespace ChessLogic
     {
         public Board Chessboard { get; private set; }
         public int Turn { get; private set; }
+        private bool TurnEndPending {  get; set; }
         public Player CurrentPlayer { get; private set; }
         public Player[] Players = new Player[2];
         public (bool, string) GameEnded { get; private set; }
@@ -18,6 +19,7 @@ namespace ChessLogic
         {
             Chessboard = new Board(8, 8);
             Turn = 1;
+            TurnEndPending = false;
             GameEnded = (false,"");
             SetBoard();
             CurrentPlayer = Players.FirstOrDefault(x => x.Color == Figure.ColorList.White);
@@ -64,7 +66,7 @@ namespace ChessLogic
             Players[1] = new Player(Figure.ColorList.Black);
         }
 
-        public void PlayMove(Position from, Position to)
+        public void PlayMove(Position from, Position to, bool endPlayerTurn = true)
         {
             Figure selectedFigure = Chessboard.ClearPosition(from);
 
@@ -104,8 +106,10 @@ namespace ChessLogic
                 Chessboard.EnPassantPosition = null;
             }
             #endregion
-
-            CurrentPlayer = CurrentPlayer.Color == Figure.ColorList.White ? Players.FirstOrDefault(x => x.Color == Figure.ColorList.Black) : Players.FirstOrDefault(x => x.Color == Figure.ColorList.White);
+            if (endPlayerTurn)
+                CurrentPlayer = CurrentPlayer.Color == Figure.ColorList.White ? Players.FirstOrDefault(x => x.Color == Figure.ColorList.Black) : Players.FirstOrDefault(x => x.Color == Figure.ColorList.White);
+            else
+                TurnEndPending = true;
 
             KingInCheckUpdate(CurrentPlayer);
             GameEnded = EndgameUpdate(CurrentPlayer);
@@ -126,16 +130,16 @@ namespace ChessLogic
             switch (promotionType.ToString())
             {
                 case "Queen":
-                    Chessboard.MoveFigure(new Queen(position.Row, position.Column, CurrentPlayer.OpositeColor));
+                    Chessboard.MoveFigure(new Queen(position.Row, position.Column, CurrentPlayer.Color));
                     break;
                 case "Rook":
-                    Chessboard.MoveFigure(new Rook(position.Row, position.Column, CurrentPlayer.OpositeColor));
+                    Chessboard.MoveFigure(new Rook(position.Row, position.Column, CurrentPlayer.Color));
                     break;
                 case "Bishop":
-                    Chessboard.MoveFigure(new Bishop(position.Row, position.Column, CurrentPlayer.OpositeColor));
+                    Chessboard.MoveFigure(new Bishop(position.Row, position.Column, CurrentPlayer.Color));
                     break;
                 case "Knight":
-                    Chessboard.MoveFigure(new Knight(position.Row, position.Column, CurrentPlayer.OpositeColor));
+                    Chessboard.MoveFigure(new Knight(position.Row, position.Column, CurrentPlayer.Color));
                     break;
             }              
         }
@@ -276,6 +280,15 @@ namespace ChessLogic
                 }
             }
             return (true, $"{CurrentPlayer.Color} player is in Checkmate!");
+        }
+
+        public void EndPlayerTurn()
+        {
+            if (TurnEndPending)
+                CurrentPlayer = CurrentPlayer.Color == Figure.ColorList.White ? Players.FirstOrDefault(x => x.Color == Figure.ColorList.Black) : Players.FirstOrDefault(x => x.Color == Figure.ColorList.White);
+            else
+                throw new MemberAccessException("Turn is no ready to be ended!");
+
         }
     }
 }

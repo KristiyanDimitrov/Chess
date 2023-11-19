@@ -17,10 +17,10 @@ namespace ChessUI
         {
             InitializeComponent();
 
-            QueenImg.Source = Images.GetImage(typeof(Queen), player.OpositeColor);
-            RookImg.Source = Images.GetImage(typeof(Rook), player.OpositeColor);
-            BishopImg.Source = Images.GetImage(typeof(Bishop), player.OpositeColor);
-            KnightImg.Source = Images.GetImage(typeof(Knight), player.OpositeColor);
+            QueenImg.Source = Images.GetImage(typeof(Queen), player.Color);
+            RookImg.Source = Images.GetImage(typeof(Rook), player.Color);
+            BishopImg.Source = Images.GetImage(typeof(Bishop), player.Color);
+            KnightImg.Source = Images.GetImage(typeof(Knight), player.Color);
         }
 
         public void DrawPromotion(Image img)
