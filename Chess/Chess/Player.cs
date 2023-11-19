@@ -10,6 +10,7 @@ namespace ChessLogic
             InCheck = false;
         }
 
+        public Figure.ColorList OpositeColor => Color == Figure.ColorList.White ? Figure.ColorList.Black : Figure.ColorList.White;
         public Figure.ColorList Color { get;  set; }
         public bool InCheck { get; set; }
     }

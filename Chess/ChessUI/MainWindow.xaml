@@ -28,16 +28,11 @@
             <UniformGrid x:Name="FigureGrid"
                          Rows="8"
                          Columns="8"
-                         RenderOptions.BitmapScalingMode="HighQuality">
-            </UniformGrid>
-
-
-            <UniformGrid x:Name="PromotionGrid"
-                         Rows="1"
-                         Columns="4"
                          RenderOptions.BitmapScalingMode="HighQuality"
-                         Visibility="Visible">
+                         Cursor="Hand">
             </UniformGrid>
+
+            <ContentControl x:Name="MenuContainer"/>
         </Grid>
     </Viewbox>
 </Window>
