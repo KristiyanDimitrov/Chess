@@ -18,6 +18,12 @@ namespace ChessLogic
         public Figure EnPassantEnabledPawn;
         public Position EnPassantPosition;
 
+        private static readonly IReadOnlyDictionary<char, int> _letterMap = new Dictionary<char, int>(8)
+        {
+            { 'A', 0 }, { 'B', 1 }, { 'C', 2 }, { 'D', 3 },
+            { 'E', 4 }, { 'F', 5 }, { 'G', 6 }, { 'H', 7 }
+        };
+
         public Board(int rows, int columns)
         {
             Rows = rows;
@@ -29,21 +35,24 @@ namespace ChessLogic
         // Return false if the figure can not advance further
         public bool BasicMoveValidate (List<Position> possiblePositions,  Figure figure, int x, int y)
         {
-            if (!ValidatePosition(new Position(x,y)))
+            var pos = new Position(x, y);
+            var figureFromPosition = GetFigureFromPosition(pos);
+
+            if (!ValidatePosition(pos))
                 return false;
 
-            if (ExistFigure(x, y) && GetFigureFromPosition(x, y).color != figure.color)
+            if (figureFromPosition?.color != figure.color)
             {
-                possiblePositions.Add(new Position(x, y));
+                possiblePositions.Add(pos);
                 return false;
             }
-            else if (GetFigureFromPosition(x, y)?.color == figure.color)
+            else if (figureFromPosition?.color == figure.color)
             {
                 return false;
             }                
             else
             {
-                possiblePositions.Add(new Position(x, y));
+                possiblePositions.Add(pos);
                 return true;
             }
                 
@@ -60,7 +69,10 @@ namespace ChessLogic
 
         public Figure GetFigureFromPosition(Position position)
         {
-            return Figures[position.Row, position.Column];
+            if (ValidatePosition(position))
+                return Figures[position.Row, position.Column];
+            else
+                return null;
         }
 
         public bool ExistFigure(Position position)
@@ -73,10 +85,8 @@ namespace ChessLogic
 
         public Type GetFigureType(Position position)
         {
-            var tst1 = GetFigureFromPosition(position);
-            var tst2 = tst1.GetType();
-
-            return GetFigureFromPosition(position).GetType();
+            var figure = GetFigureFromPosition(position);
+            return figure?.GetType();
         }
 
         public Figure.ColorList GetFigureColor(Position position)
@@ -169,24 +179,13 @@ namespace ChessLogic
             return figure;
         }
 
-        public Figure GetKingFigure(Figure.ColorList color) => Figures.Cast<Figure>().ToArray().FirstOrDefault(x => x?.color == color && x.GetType().Name == "King");
+        public Figure GetKingFigure(Figure.ColorList color) => Figures.Cast<Figure>().FirstOrDefault(x => x is not null && x.color == color && x is King);
 
         public static int GetLetterMap(char letter)
         {
-            var charPosition = new Dictionary<char, int>(){
-            {'A', 0},
-            {'B', 1},
-            {'C', 2},
-            {'D', 3},
-            {'E', 4},
-            {'F', 5},
-            {'G', 6},
-            {'H', 7}};
-
-            if (charPosition.ContainsKey(Char.ToUpper(letter)))
-                return charPosition[Char.ToUpper(letter)];
-            else
-                return -1;
+            if (_letterMap.TryGetValue(Char.ToUpper(letter), out var val))
+                return val;
+            return -1;
         }
 
         public bool PlayerHasPossibleMoves(Player player)

@@ -2,7 +2,7 @@
 
 namespace ChessLogic
 {
-    public struct Player
+    public class Player
     {
         public Player(Figure.ColorList color)
         {
@@ -10,7 +10,7 @@ namespace ChessLogic
             InCheck = false;
         }
 
-        public Figure.ColorList OpositeColor => Color == Figure.ColorList.White ? Figure.ColorList.Black : Figure.ColorList.White;
+        public Figure.ColorList OppositeColor => Color == Figure.ColorList.White ? Figure.ColorList.Black : Figure.ColorList.White;
         public Figure.ColorList Color { get;  set; }
         public bool InCheck { get; set; }
     }

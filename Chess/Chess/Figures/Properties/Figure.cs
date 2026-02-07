@@ -5,7 +5,7 @@ namespace ChessLogic.Figures.Properties
     public abstract class Figure
     {
         public enum ColorList { White, Black }
-        public ColorList color { get; private set; }
+        public ColorList color { get; }
         public Position figurePosition; //Relationship
         public abstract int evalValue { get; }
 
